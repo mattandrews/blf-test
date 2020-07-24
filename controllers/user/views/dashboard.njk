@@ -10,6 +10,12 @@
 
             <h1 class="t--underline">{{ title }}</h1>
 
+            <div class="user-nav__primary">
+                <p class="user-nav__text">
+                    {{ __('user.common.loggedInAs') }} <strong>{{ user.userData.username }}</strong>
+                </p>
+            </div>
+
             {% if alertMessage %}
                 <div class="message" role="alert">
                     {{ alertMessage }}
