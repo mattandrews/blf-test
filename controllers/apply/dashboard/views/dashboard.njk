@@ -9,9 +9,9 @@
             {{ userNavigation(userNavigationLinks) }}
 
             {% if latestApplication %}
-                <div class="s-prose">{{ copy.latest.introduction | safe }}</div>
-
                 <h1 class="t--underline">{{ title }}</h1>
+
+                 <div class="s-prose">{{ copy.latest.introduction | safe }}</div>
 
                 {% if notices.length > 0 %}
                     <div class="message message--info message--minor" role="alert">
