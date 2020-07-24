@@ -1,0 +1,54 @@
+{% extends "layouts/main.njk" %}
+{% from "components/action-card/macro.njk" import actionCard %}
+{% from "components/application-card/macro.njk" import applicationCard with context %}
+{% from "components/user-navigation/macro.njk" import userNavigation with context %}
+
+{% block content %}
+    <main role="main" id="content">
+        {% if submittedApplications.length > 0 %}
+            <section class="content-box u-inner-wide-only">
+               {{ userNavigation(userNavigationLinks) }}
+
+                {% if alertMessage %}
+                    <div class="message" role="alert">
+                        {{ alertMessage }}
+                    </div>
+                {% endif %}
+
+                <h1 class="t--underline">{{ title }}</h1>
+                <div class="s-prose">{{ copy.submitted.introduction | safe }}</div>
+                <h2 class="t--underline">{{ copy.all.submitted }}</h2>
+                <div class="flex-grid">
+                    {% for application in submittedApplications %}
+                        <div class="flex-grid__item">
+                            {{ applicationCard(application) }}
+                        </div>
+                    {% endfor %}
+                </div>
+             </section>
+        {% else %}
+            <section class="content-box u-inner-wide-only">
+               {{ userNavigation(userNavigationLinks) }}
+
+                {% if alertMessage %}
+                    <div class="message" role="alert">
+                        {{ alertMessage }}
+                    </div>
+                {% endif %}
+
+                <h1 class="t--underline">{{ title }}</h1>
+                <div class="s-prose">{{ copy.submitted.empty | safe }}</div>
+             </section>
+            <section class="u-padded u-inner-wide-only">
+                <div class="flex-grid">
+                    <div class="flex-grid__item">
+                        {{ actionCard(copy.actions.simple, isSecondary = true) }}
+                    </div>
+                    <div class="flex-grid__item">
+                        {{ actionCard(copy.actions.standard, isSecondary = true) }}
+                    </div>
+                </div>
+            </section>
+         {% endif %}
+    </main>
+{% endblock %}
