@@ -100,10 +100,23 @@
                     {% endif %}
                 </div>
             {% endif %}
+            {% if props.viewUrl %}
+                <div class="action-card__actions">
+                    <a href="{{ localify(props.viewUrl) }}" class="btn btn--small btn--outline">
+                        {{ cardCopy.view }}
+                    </a>
+                </div>
+            {% endif %}
 
             {% if props.expiresAt %}
                 <div class="application-card__meta u-text-small">
                     {{ __(cardCopy.expiresAt, formatDate(props.expiresAt)) | safe }}
+                </div>
+            {% endif %}
+
+            {% if props.type == 'submitted' %}
+                <div class="application-card__meta u-text-small">
+                    {{ cardCopy.submittedAt }} {{ formatDate(props.submittedAt, 'D MMMM YYYY') }}
                 </div>
             {% endif %}
         {% endif %}
