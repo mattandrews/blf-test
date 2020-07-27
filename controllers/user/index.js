@@ -92,6 +92,10 @@ router.use(requireNotStaffAuth, function (req, res, next) {
                 label: req.i18n.__('apply.navigation.allApplications'),
             },
             {
+                url: `${req.baseUrl}/submitted`,
+                label: req.i18n.__('apply.navigation.submittedApplications'),
+            },
+            {
                 url: req.baseUrl,
                 label: req.i18n.__('apply.navigation.account'),
             },

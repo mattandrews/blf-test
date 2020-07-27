@@ -69,6 +69,10 @@ function injectNavigationLinks(req, res, next) {
             label: req.i18n.__('apply.navigation.allApplications'),
         },
         {
+            url: `${req.baseUrl}/submitted`,
+            label: req.i18n.__('apply.navigation.submittedApplications'),
+        },
+        {
             url: localify(req.i18n.getLocale())('/user'),
             label: req.i18n.__('apply.navigation.account'),
         },
@@ -165,6 +169,40 @@ router.get(
                 pendingApplications: pendingApplications.map((application) =>
                     enrichPending(application, req.i18n.getLocale())
                 ),
+                submittedApplications: submittedApplications.map(
+                    (application) =>
+                        enrichSubmitted(application, req.i18n.getLocale())
+                ),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    '/submitted',
+    noStore,
+    requireActiveUser,
+    injectNavigationLinks,
+    async function (req, res, next) {
+        const copy = req.i18n.__('apply.dashboard');
+
+        try {
+            const [
+                submittedApplications,
+            ] = await Promise.all([
+                SubmittedApplication.findAllByUserId(req.user.id),
+            ]);
+
+            if (req.query.s === 'applicationDeleted') {
+                res.locals.alertMessage = copy.applicationDeleted;
+                res.locals.hotJarTagList = ['User deleted an application'];
+            }
+
+            res.render(path.resolve(__dirname, './views/submitted'), {
+                copy: copy,
+                title: copy.submitted.title,
                 submittedApplications: submittedApplications.map(
                     (application) =>
                         enrichSubmitted(application, req.i18n.getLocale())
