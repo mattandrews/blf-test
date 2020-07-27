@@ -2,11 +2,8 @@
     <div class="user-nav{% if isFooter %} user-nav--footer{% endif %}">
 
         {% if user and (not nextPage or not previousPage) %}
-            <div class="user-nav__primary">
-                <p class="user-nav__text">
-                    {{ __('user.common.loggedInAs') }} <strong>{{ user.userData.username }}</strong>
-                </p>
-            </div>
+        <div class="user-nav__primary">
+        </div>
         {% else %}
             <nav class="user-nav__primary">
                 <ul class="user-nav__pagination">
