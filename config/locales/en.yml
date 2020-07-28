@@ -832,6 +832,7 @@ apply:
     summary: Summary
     latestApplication: Latest application
     allApplications: All applications
+    submittedApplications: Submitted applications
   applicationCards:
     amountRequested: Amount requested
     notYetCompleted: not yet completed
@@ -841,8 +842,10 @@ apply:
     lastUpdated: Last updated
     continue: Continue with this application
     delete: Delete
+    view: View submitted application
     createdAt: Created %s at %s
     expiresAt: You have until <strong>%s</strong> to complete your application
+    submittedAt: Submitted
   dashboard:
     latest:
       title: Latest application
@@ -853,6 +856,14 @@ apply:
       title: All applications
       inProgress: Applications in progress
       submitted: Submitted applications
+    submitted:
+      title: Submitted applications
+      introduction: >
+        <p>Here are the applications you have submitted, you can view, download and print your answers or
+        <a href="/apply/all">return to current applications</a>.</p>
+      empty: >
+        <p>You don't have any submitted applications yet.
+        <a href="/apply/all">Return to current applications</a>.</p>
     noApplications: You don't have any online applications with The National Lottery Community fund right now.
     applicationDeleted: Your application was successfully deleted
     actions:

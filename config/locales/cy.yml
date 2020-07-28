@@ -820,6 +820,7 @@ apply:
     summary: Crynodeb
     latestApplication: Cais diweddaraf
     allApplications: Holl geisiadau
+    submittedApplications: Submitted applications
   applicationCards:
     amountRequested: Swm y gofynnwyd amdano
     notYetCompleted: heb ei gwblhau eto
@@ -829,8 +830,10 @@ apply:
     lastUpdated: Wedi’i ddiweddaru diwethaf
     continue: Parhau â’r cais hwn
     delete: Dileu
+    view: View submitted application
     createdAt: Wedi’i greu ar %s am %s
     expiresAt: Mae gennych nes <strong>%s</strong> i gwblhau eich cais
+    submittedAt: Wedi’i gyflwyno
   dashboard:
     latest:
       title: Cais diweddaraf
@@ -841,6 +844,14 @@ apply:
       title: Holl geisiadau
       inProgress: Ceisiadau agored
       submitted: Ceisiadau wedi’u hanfon
+    submitted:
+      title: Submitted applications
+      introduction: >
+        <p>Here are the applications you have submitted, you can view, download and print your answers or
+        <a href="/apply/all">return to current applications</a>.</p>
+      empty: >
+        <p>You don't have any submitted applications yet.
+        <a href="/apply/all">Return to current applications</a>.</p>
     noApplications: You don't have any online applications with The National Lottery Community fund right now.
     applicationDeleted: Mae eich cais wedi’i ddileu’n llwyddiannus
     actions:
