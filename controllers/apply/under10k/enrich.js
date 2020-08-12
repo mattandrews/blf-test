@@ -92,7 +92,7 @@ function enrichSubmitted(application, locale = 'en') {
         id: application.id,
         formId: application.formId,
         submittedAt: application.createdAt,
-        viewUrl: `/apply/under-10k/edit/${application.id}`,
+        viewUrl: `/apply/under-10k/view/${application.id}`,
     };
 
     return Object.assign(defaults, details(application, data, locale));
