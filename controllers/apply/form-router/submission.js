@@ -72,8 +72,10 @@ module.exports = function (
                             ),
                         },
                         {
-                            url: `${req.baseUrl}/submitted`,
-                            label: req.i18n.__('apply.navigation.submittedApplications'),
+                            url: `${res.locals.sectionUrl}/submitted`,
+                            label: req.i18n.__(
+                                'apply.navigation.submittedApplications'
+                            ),
                         },
                         {
                             url: localify(req.i18n.getLocale())('/user'),
