@@ -337,6 +337,16 @@ class SubmittedApplication extends Model {
         });
     }
 
+    static findForUser({ applicationId, userId, formId }) {
+        return this.findOne({
+            where: {
+                id: { [Op.eq]: applicationId },
+                formId: { [Op.eq]: formId },
+                userId: { [Op.eq]: userId },
+            },
+        });
+    }
+
     static findUserApplicationsByForm({ userId, formId }) {
         return this.findAll({
             where: {
