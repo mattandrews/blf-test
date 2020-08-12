@@ -18,7 +18,7 @@
                     data-ga-on="click"
                     data-ga-event-category="{{ description }}"
                     data-ga-event-action="Toggle survey"
-                >{{ promptLabel }}</summary>
+                >{{ promptLabel | safe }}</summary>
                 {{ form | safe }}
             </details>
         {% else %}
