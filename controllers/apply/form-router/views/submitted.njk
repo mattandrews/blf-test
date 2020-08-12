@@ -1,0 +1,148 @@
+{% extends "layouts/main.njk" %}
+{% from "components/details/macro.njk" import details %}
+{% from "components/form-header/macro.njk" import formHeaderWithData with context %}
+{% from "components/icons.njk" import iconTick %}
+{% from "components/user-navigation/macro.njk" import userNavigation with context %}
+{% from "./expiry-warnings.njk" import expiryLoggedOut with context %}
+{% from "components/documents-card/macro.njk" import documentsCard with context %}
+{% from "components/print-button/macro.njk" import printButton %}
+{% from "components/icons.njk" import iconDownload %}
+{% from "components/feedback.njk" import inlineFeedback with context %}
+
+{% block title %}{{ title }} | {{ formTitle }} | {% endblock %}
+
+{% macro submittedCard(title, expiresAt, application, user) %}
+    <h1 class="t--underline">{{ title }}</h1>
+    <p>{{ __('apply.view.introduction', formatDate(expiresAt)) }}</p>
+    <aside class="card">
+        <header class="card__header">
+            <h3 class="card__title">{{ __('apply.view.submittedAt', formatDate(expiresAt, 'DD/MM/yyyy')) }}</h3>
+        </header>
+        <div class="card__body">
+            <dl class="document-summary__contents">
+                <dt><strong>{{ copy.applicationCards.amountRequested }}:</strong> {{ application.amountRequested }}</dt>
+                {% for item in application.overview %}
+                    <dt><strong>{{ item.label }}:</strong> {% if item.value %}{{ item.value }}{% else %}{{ cardCopy.notYetCompleted }}{% endif %}</dt>
+                {% endfor %}
+                <dt><strong>{{ copy.view.submittedBy }}:</strong> {{ user }}</dt>
+            </dl>
+        </div>
+    </aside>
+    <p>{{ printButton(label = copy.view.print) }}
+        <button class="btn btn--small btn--outline">
+            <span class="btn__icon">{{ iconDownload('small') }}</span>
+            {{ copy.view.download }}
+        </button>
+    </p>
+    <div class="inline-links">
+        <h3>{{ copy.view.section }}</h3>
+        <ul>
+            {% for section in form.sections %}
+                <li>-<a href="#{{ section.title }}"><strong>{{ section.title}}</strong></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro submittedSummary(step, stepNumber, totalSteps) %}
+    <div class="step-summary">
+        <h3 class="step-summary__title u-tone-brand-primary">
+            <strong>{{ step.title }}</strong>
+        </h3>
+
+        {% if step.isRequired %}
+            {% for fieldset in step.fieldsets %}
+                {% for field in fieldset.fields %}
+
+                    <div class="step-summary__data is-stacked"
+                        id="field-{{ field.name }}">
+                        <div class="step-indent">
+                            <div class="step-summary__data__question"><strong>{{ field.label | safe }}</strong></div>
+                            <div class="step-summary__data__answer">
+                                <div class="step-summary__data__answer-inner">
+
+                                    {% if field.displayValue %}
+                                        {% set cleanValue = field.displayValue | striptags(true) | escape | nl2br %}
+                                        <span class="s-prose" data-hj-suppress>{{ cleanValue }}</span>
+                                    {% else %}
+                                        <span aria-label="{{ copy.summary.notYetCompleted }}">&ndash;</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            <div class="step-summary__data">
+                <p class="u-margin-top-s">{{ copy.summary.notRequired }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro sectionSummary(section, sectionNumber) %}
+    {% set secTitle = section.shortTitle or section.title %}
+    <section class="section-summary section-summary--{{ section.progress.status }}">
+        <h1 class="t--underline" id="{{ section.title }}">{{ secTitle }}</h1>
+
+        <article class="section-summary__content u-padded-s">
+
+            {% for step in section.steps %}
+                {{ submittedSummary(
+                    step = step,
+                    stepNumber = loop.index,
+                    totalSteps = section.steps.length
+                )}}
+            {% endfor %}
+        </article>
+    </section>
+{% endmacro %}
+
+{% block content %}
+    <main role="main" id="content">
+        <div class="content-box u-inner-wide-only js-apply-form js-session-expiry-warning"
+             data-form-short-id="{{ formShortId }}">
+
+            {{ userNavigation(userNavigationLinks) }}
+
+            {{ submittedCard(
+                title = form.summary.title,
+                expiresAt = form.expiresAt,
+                application = application,
+                user = user
+            ) }}
+
+        </div>
+        <div id="feedback" class="u-inner-wide-only u-margin-top u-margin-bottom breadcrumb-trail--tinted">
+            {{ inlineFeedback(
+                description = "submitted_application_view",
+                promptLabel = '<strong>' + copy.view.feedback.promptLabel + '</strong>',
+                fieldLabel = copy.view.feedback.label,
+                isToggleable = true
+            )  }}
+        </div>
+        <div class="content-box u-inner-wide-only js-apply-form js-session-expiry-warning"
+             data-form-short-id="{{ formShortId }}">
+
+            {% if notices.length > 0 %}
+                <div class="message message--info message--minor" role="alert">
+                    {% for notice in notices  %}
+                        <h2 class="t4 u-margin-bottom-s">{{ notice.title }}</h2>
+                        <p>{{ notice.body | safe }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for section in form.sections %}
+                {{ sectionSummary(section, loop.index) }}
+            {% endfor %}
+
+        </div>
+    </main>
+{% endblock %}
+
+{% block modals %}
+    {# We don't need the pending expiry warning as there's nothing to be saved here #}
+    {{ expiryLoggedOut() }}
+{% endblock %}
