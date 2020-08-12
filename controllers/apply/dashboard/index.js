@@ -189,9 +189,7 @@ router.get(
         const copy = req.i18n.__('apply.dashboard');
 
         try {
-            const [
-                submittedApplications,
-            ] = await Promise.all([
+            const [submittedApplications] = await Promise.all([
                 SubmittedApplication.findAllByUserId(req.user.id),
             ]);
 

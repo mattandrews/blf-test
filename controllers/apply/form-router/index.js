@@ -12,6 +12,7 @@ const formidable = require('formidable');
 
 const {
     PendingApplication,
+    SubmittedApplication,
     ApplicationEmailQueue,
 } = require('../../../db/models');
 
@@ -24,6 +25,9 @@ const generateExpiryQueue = require('../expiries/generate-expiry-queue');
 
 const { getObject } = require('./lib/file-uploads');
 const { getShortId } = require('./lib/hotjar');
+
+const enrichAwardsForAll = require('../under10k/enrich');
+const enrichStandard = require('../standard-proposal/enrich');
 
 function initFormRouter({
     formId,
@@ -41,6 +45,10 @@ function initFormRouter({
         return `forms.${formId}.currentEditingId`;
     }
 
+    function currentlyViewingSessionKey() {
+        return `forms.${formId}.currentViewingId`;
+    }
+
     function formProgrammeSessionKey() {
         return `forms.${formId}.programme`;
     }
@@ -50,6 +58,14 @@ function initFormRouter({
             return res.redirect(removeWelsh(req.originalUrl));
         } else {
             next();
+        }
+    }
+
+    function enrichSubmitted(application, locale) {
+        if (application.formId === 'awards-for-all') {
+            return enrichAwardsForAll.enrichSubmitted(application, locale);
+        } else {
+            return enrichStandard.enrichSubmitted(application, locale);
         }
     }
 
@@ -172,7 +188,7 @@ function initFormRouter({
                 label: req.i18n.__('apply.navigation.allApplications'),
             },
             {
-                url: `${req.baseUrl}/submitted`,
+                url: `${res.locals.sectionUrl}/submitted`,
                 label: req.i18n.__('apply.navigation.submittedApplications'),
             },
             {
@@ -234,6 +250,13 @@ function initFormRouter({
         });
     }
 
+    function redirectCurrentlyViewing(req, res, applicationId) {
+        set(req.session, currentlyViewingSessionKey(), applicationId);
+        req.session.save(() => {
+            res.redirect(`${req.baseUrl}/submitted`);
+        });
+    }
+
     /**
      * Route: New application
      */
@@ -285,6 +308,13 @@ function initFormRouter({
     });
 
     /**
+     * Route: View submitted application
+     */
+    router.get('/view/:applicationId', function (req, res) {
+        redirectCurrentlyViewing(req, res, req.params.applicationId);
+    });
+
+    /**
      * Route: Delete application
      */
     router.use('/delete', require('./delete')(formId));
@@ -321,43 +351,88 @@ function initFormRouter({
      */
     router.use(async (req, res, next) => {
         const currentEditingId = get(req.session, currentlyEditingSessionKey());
+        const currentViewingId = get(req.session, currentlyViewingSessionKey());
 
-        if (currentEditingId) {
-            res.locals.currentlyEditingId = currentEditingId;
+        if (currentEditingId || currentViewingId) {
+            if (currentEditingId) {
+                res.locals.currentlyEditingId = currentEditingId;
 
-            try {
-                const currentApplication = await PendingApplication.findForUser(
-                    {
-                        formId: formId,
-                        applicationId: currentEditingId,
-                        userId: req.user.userData.id,
+                try {
+                    const currentApplication = await PendingApplication.findForUser(
+                        {
+                            formId: formId,
+                            applicationId: currentEditingId,
+                            userId: req.user.userData.id,
+                        }
+                    );
+
+                    if (currentApplication) {
+                        const currentApplicationData = get(
+                            currentApplication,
+                            'applicationData',
+                            {}
+                        );
+
+                        res.locals.currentApplication = currentApplication;
+                        res.locals.currentApplicationData = currentApplicationData;
+
+                        res.locals.currentApplicationStatus = get(
+                            currentApplication,
+                            'status'
+                        );
+                    } else {
+                        res.redirect(req.baseUrl);
                     }
-                );
-
-                if (currentApplication) {
-                    const currentApplicationData = get(
-                        currentApplication,
-                        'applicationData',
-                        {}
+                } catch (error) {
+                    Sentry.captureException(
+                        new Error(
+                            `Unable to find application ${currentEditingId}`
+                        )
                     );
-
-                    res.locals.currentApplication = currentApplication;
-                    res.locals.currentApplicationData = currentApplicationData;
-
-                    res.locals.currentApplicationStatus = get(
-                        currentApplication,
-                        'status'
-                    );
-
-                    next();
-                } else {
                     res.redirect(req.baseUrl);
                 }
-            } catch (error) {
-                Sentry.captureException(
-                    new Error(`Unable to find application ${currentEditingId}`)
-                );
-                res.redirect(req.baseUrl);
+            }
+
+            if (currentViewingId) {
+                res.locals.currentlyViewingId = currentViewingId;
+
+                try {
+                    const submittedApplication = await SubmittedApplication.findForUser(
+                        {
+                            formId: formId,
+                            applicationId: currentViewingId,
+                            userId: req.user.userData.id,
+                        }
+                    );
+
+                    if (submittedApplication) {
+                        const submittedApplicationData = get(
+                            submittedApplication,
+                            'salesforceSubmission.application',
+                            {}
+                        );
+
+                        const enrichedSubmittedApplication = enrichSubmitted(
+                            submittedApplication,
+                            req.i18n.getLocale()
+                        );
+
+                        res.locals.submittedApplication = submittedApplication;
+                        res.locals.submittedApplicationData = submittedApplicationData;
+                        res.locals.enrichedSubmittedApplication = enrichedSubmittedApplication;
+                    } else {
+                        res.redirect(req.baseUrl);
+                    }
+                } catch (error) {
+                    Sentry.captureException(
+                        new Error(
+                            `Unable to find application ${currentViewingId}`
+                        )
+                    );
+                    res.redirect(req.baseUrl);
+                }
+
+                next();
             }
         } else {
             res.redirect(req.baseUrl);
@@ -369,11 +444,15 @@ function initFormRouter({
      * We should prevent access to anything that's pending deletion to avoid user confusion and lost data
      */
     router.use((req, res, next) => {
-        if (res.locals.currentApplication.isExpired) {
-            return res.render(path.resolve(__dirname, './views/expired'), {
-                title: res.locals.copy.expired.title,
-                csrfToken: req.csrfToken(),
-            });
+        if (res.locals.currentApplication) {
+            if (res.locals.currentApplication.isExpired) {
+                return res.render(path.resolve(__dirname, './views/expired'), {
+                    title: res.locals.copy.expired.title,
+                    csrfToken: req.csrfToken(),
+                });
+            } else {
+                next();
+            }
         } else {
             next();
         }
@@ -383,6 +462,11 @@ function initFormRouter({
      * Route: Summary
      */
     router.use('/summary', require('./summary')(formBuilder));
+
+    /**
+     * Route: View Submitted application
+     */
+    router.use('/submitted', require('./submitted')(formBuilder));
 
     /**
      * Route: Submission
