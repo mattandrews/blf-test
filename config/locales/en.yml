@@ -896,6 +896,17 @@ apply:
     notRequired: You don't need to fill this bit in because of what you've told us about your project so far.
     errorSummaryTitle: These fields need attention before you can submit
     featuredErrorsTitle: Some details in your application need extra attention
+  view:
+    introduction: This page shows your application as it was submitted on %s.
+      It will not be updated as your application progresses.
+    submittedAt: Application submitted on %s
+    submittedBy: Submitted by
+    print: Print your application
+    download: Download your application
+    section: Sections
+    feedback:
+      promptLabel: Please help us improve this page by sending us feedback
+      label: How was your experience of using our submitted applications view today?
   delete:
     title: Are you sure you want to delete your application?
     message: >
