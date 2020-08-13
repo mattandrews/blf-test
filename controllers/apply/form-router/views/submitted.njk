@@ -29,10 +29,10 @@
         </div>
     </aside>
     <p>{{ printButton(label = copy.view.print) }}
-        <button class="btn btn--small btn--outline">
-            <span class="btn__icon">{{ iconDownload('small') }}</span>
-            {{ copy.view.download }}
-        </button>
+        <a class="btn btn--medium btn--outline"
+           href="{{ application.viewUrl }}/pdf">
+            {{ iconDownload() }} {{ copy.view.download }}
+        </a>
     </p>
     <div class="inline-links">
         <h3>{{ copy.view.section }}</h3>
