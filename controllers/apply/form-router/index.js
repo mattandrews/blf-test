@@ -250,11 +250,17 @@ function initFormRouter({
         });
     }
 
-    function redirectCurrentlyViewing(req, res, applicationId) {
+    function redirectCurrentlyViewing(req, res, applicationId, pdf) {
         set(req.session, currentlyViewingSessionKey(), applicationId);
-        req.session.save(() => {
-            res.redirect(`${req.baseUrl}/submitted`);
-        });
+        if (pdf) {
+            req.session.save(() => {
+                res.redirect(`${req.baseUrl}/submitted/pdf`);
+            });
+        } else {
+            req.session.save(() => {
+                res.redirect(`${req.baseUrl}/submitted`);
+            });
+        }
     }
 
     /**
@@ -310,8 +316,13 @@ function initFormRouter({
     /**
      * Route: View submitted application
      */
-    router.get('/view/:applicationId', function (req, res) {
-        redirectCurrentlyViewing(req, res, req.params.applicationId);
+    router.get('/view/:applicationId/:pdf?', function (req, res) {
+        redirectCurrentlyViewing(
+            req,
+            res,
+            req.params.applicationId,
+            req.params.pdf
+        );
     });
 
     /**
