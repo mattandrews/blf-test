@@ -30,6 +30,7 @@ test('address field', function () {
         postcode: 'B15 1TR',
     });
 
+    expect(field.validate().error).toBeUndefined();
     expect(field.displayValue).toBe(
         '1234 example street,\nEdgbaston,\nBirmingham,\nWest Midlands,\nB15 1TR'
     );

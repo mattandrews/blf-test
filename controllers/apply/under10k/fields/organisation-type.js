@@ -3,12 +3,33 @@ const get = require('lodash/fp/get');
 const compact = require('lodash/compact');
 const { oneLine } = require('common-tags');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
 const { RadioField } = require('../../lib/field-types');
 
 const { ORGANISATION_TYPES, STATUTORY_BODY_TYPES } = require('../constants');
 
 module.exports = {
+    /*
+     * Helper functions for other fields to toggle schemas
+     * based on particular org types being present or not
+     */
+    stripIfExcludedOrgType(types, schema) {
+        return Joi.when(Joi.ref('organisationType'), {
+            is: Joi.exist().valid(...types),
+            then: Joi.any().strip(),
+            otherwise: schema,
+        });
+    },
+    stripUnlessOrgTypes(types, schema) {
+        return Joi.when(Joi.ref('organisationType'), {
+            is: Joi.exist().valid(...types),
+            then: schema,
+            otherwise: Joi.any().strip(),
+        });
+    },
+    /*
+     * Fields for form usage
+     * */
     fieldOrganisationType(locale, data = {}, flags = {}) {
         const localise = get(locale);
 

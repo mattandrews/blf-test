@@ -76,7 +76,16 @@ function getPhoneFor(country) {
     return countryPhone || '028 9568 0143';
 }
 
-module.exports = function sendExpiryEmail(
+function getProjectCountry(applicationData, formId) {
+    if (formId === 'awards-for-all') {
+        return get(applicationData, 'projectCountry');
+    } else if (formId === 'standard-enquiry') {
+        const countries = get(applicationData, 'projectCountries');
+        return countries && countries.length === 1 ? countries[0] : 'Multiple';
+    }
+}
+
+function sendExpiryEmail(
     {
         formId,
         emailType,
@@ -105,17 +114,6 @@ module.exports = function sendExpiryEmail(
         },
     }[formId];
 
-    function getProjectCountry() {
-        if (formId === 'awards-for-all') {
-            return get(applicationData, 'projectCountry');
-        } else if (formId === 'standard-enquiry') {
-            const countries = get(applicationData, 'projectCountries');
-            return countries && countries.length === 1
-                ? countries[0]
-                : 'Multiple';
-        }
-    }
-
     function getBilingualStatus() {
         if (formId === 'awards-for-all') {
             return get(applicationData, 'projectCountry') === 'wales';
@@ -127,7 +125,7 @@ module.exports = function sendExpiryEmail(
 
     function getExpiryDates() {
         const expiresOn = moment(expiresAt);
-        const dateFormat = 'D MMMM, YYYY HH:mm';
+        const dateFormat = 'D MMMM, YYYY h:mma';
         return {
             en: expiresOn.format(dateFormat),
             cy: expiresOn.locale('cy').format(dateFormat),
@@ -153,8 +151,10 @@ module.exports = function sendExpiryEmail(
     const templateData = {
         isBilingual: getBilingualStatus(),
         projectName: get(applicationData, 'projectName'),
-        countryPhoneNumber: getPhoneFor(getProjectCountry()),
-        countryEmail: getEmailFor(getProjectCountry()),
+        countryPhoneNumber: getPhoneFor(
+            getProjectCountry(applicationData, formId)
+        ),
+        countryEmail: getEmailFor(getProjectCountry(applicationData, formId)),
         unsubscribeLink: unsubscribeLink,
         expiryDate: getExpiryDates(),
         editLink: editLink,
@@ -172,4 +172,9 @@ module.exports = function sendExpiryEmail(
         },
         mockMailTransport
     );
+}
+
+module.exports = {
+    getProjectCountry,
+    sendExpiryEmail,
 };

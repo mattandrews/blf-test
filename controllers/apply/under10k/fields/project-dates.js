@@ -4,7 +4,7 @@ const has = require('lodash/fp/has');
 const moment = require('moment');
 const { oneLine } = require('common-tags');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
 const { DateField, RadioField } = require('../../lib/field-types');
 
 function getLeadTimeWeeks(country) {
@@ -89,7 +89,9 @@ module.exports = {
                     const mapValues = (option) => option.value;
 
                     return Joi.string()
-                        .valid(options().filter(excludeDisabled).map(mapValues))
+                        .valid(
+                            ...options().filter(excludeDisabled).map(mapValues)
+                        )
                         .required();
                 } else {
                     return Joi.any().strip();

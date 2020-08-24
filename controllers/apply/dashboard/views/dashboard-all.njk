@@ -47,7 +47,7 @@
                         <div class="message message--info message--minor" role="alert">
                             {% for notice in notices  %}
                                 <h2 class="t4 u-no-margin">{{ notice.title }}</h2>
-                                <p>{{ notice.body }}</p>
+                                <p>{{ notice.body | safe }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}

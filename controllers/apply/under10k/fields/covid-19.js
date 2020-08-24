@@ -2,7 +2,7 @@
 const get = require('lodash/fp/get');
 const { oneLine, stripIndents } = require('common-tags');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
 const { RadioField } = require('../../lib/field-types');
 
 module.exports = {

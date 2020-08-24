@@ -1,7 +1,7 @@
 'use strict';
 const has = require('lodash/has');
 const countWords = require('../count-words');
-const Joi = require('../joi-extensions');
+const Joi = require('../joi-extensions-next');
 
 const Field = require('./field');
 
@@ -32,8 +32,10 @@ class TextareaField extends Field {
         this.schema = this.isRequired
             ? baseSchema.required()
             : baseSchema.allow('').optional();
+    }
 
-        this.messages = [
+    defaultMessages() {
+        return [
             {
                 type: 'string.minWords',
                 message: this.localise({
@@ -48,7 +50,7 @@ class TextareaField extends Field {
                     cy: `Rhaid i’r ateb fod yn llai na ${this.maxWords} gair`,
                 }),
             },
-        ].concat(props.messages || []);
+        ];
     }
 
     getType() {

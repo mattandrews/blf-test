@@ -38,12 +38,19 @@ class Feedback extends Model {
         ]);
     }
 
-    static findAllGroupedByDescription() {
+    static findAllGroupedByDescription(dateRange) {
+        let whereClause = {};
+        if (dateRange) {
+            whereClause = {
+                createdAt: { [Op.between]: [dateRange.start, dateRange.end] },
+            };
+        }
         return this.findAll({
             order: [
                 ['description', 'ASC'],
                 ['updatedAt', 'DESC'],
             ],
+            where: whereClause,
         }).then(groupBy((result) => result.description.toLowerCase()));
     }
 

@@ -3,7 +3,7 @@
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 
-const sendExpiryEmail = require('./send-expiry-email');
+const { sendExpiryEmail } = require('./send-expiry-email');
 
 const mockTransport = nodemailer.createTransport({
     jsonTransport: true,

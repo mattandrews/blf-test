@@ -2,7 +2,7 @@
 const find = require('lodash/fp/find');
 const uniq = require('lodash/uniq');
 const castArray = require('lodash/castArray');
-const Joi = require('../joi-extensions');
+const Joi = require('../joi-extensions-next');
 
 const Field = require('./field');
 
@@ -31,7 +31,7 @@ class RadioField extends Field {
     defaultSchema() {
         const options = this.options || [];
         const baseSchema = Joi.string().valid(
-            options.map((option) => option.value)
+            ...options.map((option) => option.value)
         );
 
         return this.isRequired ? baseSchema.required() : baseSchema.optional();

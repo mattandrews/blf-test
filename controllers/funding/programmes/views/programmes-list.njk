@@ -20,7 +20,7 @@
                         and may confuse users if we show two different statuses on one page
                     #}
                     {% if countryCovidStatus and region !== 'UK-wide' and region !== 'Ledled y DU' %}
-                        <p>{{ countryCovidStatus.status | nl2br | safe }}</p>
+                        {{ countryCovidStatus.status | safe }}
                     {% endif %}
                     <ol class="flex-grid flex-grid--3up">
                         {% for programme in regionProgrammes %}
@@ -32,7 +32,7 @@
                 {% endfor %}
             {% elseif programmes.length > 0 %}
                 {% if countryCovidStatus %}
-                    <p>{{ countryCovidStatus.status | nl2br | safe }}</p>
+                    {{ countryCovidStatus.status | safe }}
                 {% endif %}
                 <ol class="flex-grid flex-grid--3up">
                     {% for programme in programmes %}

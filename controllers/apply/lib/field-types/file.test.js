@@ -18,7 +18,7 @@ test('FileField', function () {
         size: 13264,
         type: 'application/pdf',
     });
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
     expect(field.displayValue).toBe('example.pdf (PDF, 13 KB)');
 
     field.withValue({

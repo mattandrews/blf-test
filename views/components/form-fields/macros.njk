@@ -266,7 +266,7 @@
         <legend class="ff-label">{{ labelFor(field) }}</legend>
         {{ explanationFor(field) }}
 
-        {% if field.optgroups  %}
+        {% if field.optgroups %}
             {% for optgroup in field.optgroups %}
                 {% set optgroupIdx = loop.index %}
                 <fieldset>

@@ -83,6 +83,18 @@ const SALESFORCE_AUTH = {
     instanceId:
         process.env.SALESFORCE_INSTANCE_ID ||
         getParameter('salesforce.instanceId'),
+    sandboxConsumerKey:
+        process.env.SANDBOX_SALESFORCE_CONSUMER_KEY ||
+        getParameter('sandbox.salesforce.consumerKey'),
+    sandboxConsumerSecret:
+        process.env.SANDBOX_SALESFORCE_CONSUMER_SECRET ||
+        getParameter('sandbox.salesforce.consumerSecret'),
+    sandboxUsername:
+        process.env.SANDBOX_SALESFORCE_USERNAME ||
+        getParameter('sandbox.salesforce.username'),
+    sandboxToken:
+        process.env.SANDBOX_SALESFORCE_TOKEN ||
+        getParameter('sandbox.salesforce.token'),
 };
 
 // These expire in July 2021
@@ -104,8 +116,6 @@ const POSTCODES_API_KEY =
 
 const S3_KMS_KEY_ID =
     process.env.S3_KMS_KEY_ID || getParameter('s3.kms.key.id');
-
-const DATA_STUDIO_UNDER10K_URL = getParameter('dataStudio.url.awardsForAll');
 
 /**
  * Email expiry secret
@@ -129,12 +139,19 @@ const DOTDIGITAL_API = {
         process.env.DOTDIGITAL_PASS || getParameter('dotdigital.api.password'),
 };
 
+/**
+ * Sandbox domain
+ * Used to specify the requested salesforce endpoint
+ * */
+
+const SALESFORCE_SANDBOX_DOMAIN =
+    process.env.SALESFORCE_SANDBOX_DOMAIN || getParameter('sandbox.test.domain');
+
 module.exports = {
     AZURE_AUTH,
     BANK_API,
     CONTENT_API_URL,
     CONTENT_API_SANDBOX_URL,
-    DATA_STUDIO_UNDER10K_URL,
     DB_CONNECTION_URI,
     DOTDIGITAL_API,
     EMAIL_EXPIRY_SECRET,
@@ -143,6 +160,7 @@ module.exports = {
     MATERIAL_SUPPLIER,
     PAST_GRANTS_API_URI,
     POSTCODES_API_KEY,
+    SALESFORCE_SANDBOX_DOMAIN,
     S3_KMS_KEY_ID,
     SALESFORCE_AUTH,
     SENTRY_DSN,

@@ -10,7 +10,7 @@ We monitor the following log sources:
 
 -   EC2 memory usage
 -   Nginx error logs
--   Clamav logs (antivirus)
+-   ClamAV logs (antivirus)
 
 We also use [Winston](https://github.com/winstonjs/winston) to log directly to CloudWatch from within our app. We use these logs to power internal dashboards to show key statistics about the health of the app.
 

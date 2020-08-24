@@ -1,0 +1,255 @@
+#!/usr/bin/env node
+'use strict';
+
+/*
+* A script to email people in bulk, to be run from local environments.
+*
+* It has three "modes" – database, template, and send.
+*
+* 1. Database mode
+* ================
+*
+* This will create a SQLite database of email addresses and a "sent" column,
+* to indicate if that user has been emailed before. This allows us to re-run
+* this script (in "send" mode) multiple times and avoid re-sending the email
+* (in case one batch fails to send etc).
+*
+* To run in database mode you'll need to provide a CSV file containing a "username"
+* column, which must be an email address. Example:
+*
+* id,username,date
+* 1,foo@bar.com,2020-07-27 11:32:00
+* 2,baz@quux.xyz,2020-07-27 11:33:00
+*
+* When this CSV file exists, call this script like so:
+*
+* ./bin/bulk-emailer -m database -d <path-to-database-file> -c <path-to-csv-file>
+*
+* This will create a SQLite database from the CSV file, which can then be used
+* to send emails.
+*
+* 2. Template mode
+* ================
+*
+* When sending bulk email via AWS SES, we need to provide an HTML email template.
+* This function will use a Nunjucks template file to output HTML (with our logo
+* and branding) plus a subject line (configured below).
+*
+* To run this command:
+*
+* ./bin/bulk-emailer -m template -t <unique-template-name>
+*
+* This will create a template – keep a record of its name to later send it.
+* Note that templates can contain variables which are supplied when sending,
+* but this script doesn't make use of this.
+*
+* 3. Send mode
+* ================
+*
+* The core of this script is to send emails in bulk. Our AWS SES account has a
+* limit of emails per second (configured below) which we will be blocked from
+* if we exceed it. This function will send emails in bulk at a rate of this
+* limit per second (eg. 14/second currently).
+*
+* The function looks up users in the database (created above) who have not been
+* emailed already, looks up the template (created above) and sends it to each
+* user in a batch. If there are errors (eg. invalid email addresses in the batch),
+* the task will fail. If the batch succeeds then those email addresses are marked
+* as having been sent, so if the script is re-run they won't be emailed again.
+*
+* The script will output the addresses of each batch it sends to.
+*
+* To run this command:
+*
+* ./bin/bulk-emailer -m send -d <path-to-database-file> -t <unique-template-name>
+*
+* Watch for errors in the console, but otherwise this script will tick along and
+* send approx 14 emails/second (or around 840 per minute).
+*
+* */
+
+const chunk = require('lodash/chunk');
+const htmlToText = require('html-to-text');
+const AWS = require('aws-sdk');
+const sqlite3 = require('sqlite3').verbose();
+const csv = require('csvtojson');
+
+const SES = new AWS.SES({
+    apiVersion: '2010-12-01',
+    region: 'eu-west-1'
+});
+
+const { generateHtmlEmail } = require('../common/mail');
+
+const argv = require('yargs')
+    .alias('m', 'mode')
+    .describe(
+        'm',
+        'What mode this script should run in. One of `database`, `send` or `template`.'
+    )
+    .alias('t', 'template')
+    .describe('t', 'Pass the name of a template to use')
+    .alias('d', 'database')
+    .describe('d', 'Pass the filename of a database to use')
+    .alias('c', 'csv')
+    .describe('c', 'Pass the filename of a CSV file with a `username` column of email addresses')
+    .demandOption(['m'])
+    .help('h')
+    .alias('h', 'help').argv;
+
+const mode = argv.mode;
+const emailTemplate = argv.template;
+const dbPath = argv.database;
+const csvPath = argv.csv;
+
+if (mode === 'send' && !emailTemplate) {
+    throw new Error(
+        'You must provide the name of a template to use for this email'
+    );
+} else if (mode === 'template' && !emailTemplate) {
+    throw new Error('You must provide a template name to create');
+} else if (mode === 'database' && !csvPath) {
+    throw new Error('You must provide a CSV file of email addresses to store');
+}
+
+let db;
+if (mode !== 'template' && !dbPath) {
+    throw new Error('You must provide the path to a database file (-d or --database)');
+} else if (mode !== 'template') {
+    db = new sqlite3.Database(dbPath, (err) => {
+        if (err) {
+            throw new Error(err);
+        }
+        console.log('Connected to the bulk emails database.');
+    });
+}
+
+
+// Email configuration
+const SENDS_PER_SECOND = 10; // SES limit for our account
+const EMAIL_SOURCE = 'noreply@tnlcommunityfund.org.uk';
+const EMAIL_SUBJECT = 'Important - You have one week to finish your application';
+
+// Send a pre-templated email to an array of senders (max 50)
+const sendBulkEmail = (emails) => {
+    return SES.sendBulkTemplatedEmail({
+        Destinations: [
+            {
+                Destination: {
+                    BccAddresses: emails
+                }
+            }
+        ],
+        Source: EMAIL_SOURCE,
+        Template: emailTemplate,
+        DefaultTemplateData: '{}'
+    }).promise();
+};
+
+// Send a batch of emails every second
+const processEmailQueue = (emailAddresses) => {
+    // Split the list into chunks matching our limit per-second
+    const emailQueue = chunk(emailAddresses, SENDS_PER_SECOND);
+
+    // Send a bulk email to $SENDS_PER_SECOND people, every second
+    emailQueue.forEach((queue, i) => {
+        setTimeout(function() {
+            console.log('Sending batch: ' + i);
+            sendBulkEmail(queue)
+                .then((data) => {
+                    console.log('Email was sent to batch', queue, data);
+
+                    if (data.Status[0].Status === 'Success') {
+                        // Mark these users as sent
+                        db.serialize(() => {
+                            const stmt = db.prepare(
+                                'UPDATE users SET sent = 1 WHERE email = ?'
+                            );
+                            queue.forEach((email) => {
+                                stmt.run(email);
+                            });
+                            stmt.finalize();
+                        });
+                    } else {
+                        console.log('Error with this batch');
+                    }
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+        }, i * 1000);
+    });
+};
+
+// Create an email template in SES for future use based on a Nunjucks template
+const createHtmlTemplate = async () => {
+    // Make HTML version
+    const emailHtml = await generateHtmlEmail({
+        template: './controllers/apply/expiries/views/ccsf-closure-email.njk',
+        templateData: {}
+    });
+
+    // Make plain text version from HTML
+    const emailText = htmlToText.fromString(emailHtml, {
+        wordwrap: 130,
+        hideLinkHrefIfSameAsText: true,
+        ignoreImage: true
+    });
+
+    // Register the new template with SES
+    return SES.createTemplate({
+        Template: {
+            TemplateName: emailTemplate,
+            SubjectPart: EMAIL_SUBJECT,
+            TextPart: emailText,
+            HtmlPart: emailHtml
+        }
+    }).promise();
+};
+
+if (mode === 'send') {
+    // Look up users who haven't been emailed yet
+    db.all('SELECT * FROM users WHERE sent = 0', [], (err, rows) => {
+        if (err) {
+            throw new Error(err);
+        }
+        const emailAddresses = rows.map((_) => _.email);
+        // Start sending the emails
+        processEmailQueue(emailAddresses);
+    });
+} else if (mode === 'template') {
+    // Create an HTML email template and store it in AWS SES for future use
+    createHtmlTemplate()
+        .then((data) => {
+            console.log(
+                'Template was successfully created with the name ' +
+                emailTemplate,
+                data
+            );
+        })
+        .catch((err) => {
+            throw new Error(err);
+        });
+} else if (mode === 'database') {
+    // Convert a CSV file of email addresses into a database
+    csv()
+        .fromFile(csvPath)
+        .then((users) => {
+            // Create a database and insert user records
+            db.serialize(() => {
+                db.run('DROP TABLE IF EXISTS users');
+                db.run('CREATE TABLE users("email" TEXT, "sent" INTEGER)');
+                const stmt = db.prepare('INSERT INTO users VALUES (?, ?)');
+                users.forEach((user) => {
+                    stmt.run(user.username, 0);
+                });
+                stmt.finalize();
+            });
+            console.log(
+                `Database created and populated with ${users.length} email addresses`
+            );
+            db.close();
+        });
+} else {
+    console.log('Unknown command options.');
+}

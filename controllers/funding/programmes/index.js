@@ -148,6 +148,7 @@ router.get(
                 pageLimit: 250,
             });
 
+            const title = req.i18n.__('funding.allProgrammes.title');
             const allFundingProgrammes = response.result || [];
 
             const locationParam = getValidLocation(
@@ -167,10 +168,6 @@ router.get(
                 return /\d/.test(firstLetter) ? '#' : firstLetter;
             });
 
-            const breadcrumbs = res.locals.breadcrumbs.concat({
-                label: res.locals.title,
-            });
-
             const regionsCopy = req.i18n.__('global.regions');
             const locations = {
                 england: regionsCopy.england,
@@ -187,6 +184,10 @@ router.get(
                 })
             );
 
+            const breadcrumbs = res.locals.breadcrumbs.concat({
+                label: title,
+            });
+
             if (locationParam) {
                 breadcrumbs.push({
                     label: locations[locationParam],
@@ -199,7 +200,7 @@ router.get(
             }
 
             res.render(path.resolve(__dirname, './views/all-programmes'), {
-                title: req.i18n.__('funding.allProgrammes.title'),
+                title: title,
                 locationLinks: locationLinks,
                 locationParam: locationParam,
                 groupedProgrammes: groupedProgrammes,

@@ -1,5 +1,5 @@
 'use strict';
-const postcode = require('postcode');
+const { isValid: postcodeIsValid } = require('postcode');
 
 /**
  * Joi wrapper around https://github.com/ideal-postcodes/postcode
@@ -15,7 +15,7 @@ module.exports = function postcodeString(joi) {
             {
                 name: 'postcode',
                 validate(_params, value, state, options) {
-                    if (postcode.isValid(value)) {
+                    if (postcodeIsValid(value)) {
                         return value;
                     } else {
                         return this.createError(

@@ -6,14 +6,6 @@ const router = express.Router();
 
 const { buildArchiveUrl, makeWelsh } = require('../../common/urls');
 
-const aliases = require('./aliases');
-
-/**
- * Handle Aliases
- */
-aliases.forEach((redirect) => {
-    router.get(redirect.from, (req, res) => res.redirect(301, redirect.to));
-});
 
 /**
  * Handle legacy programme pages as wildcards

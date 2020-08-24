@@ -6,7 +6,7 @@ exports[`Apply for funding under £10,000 expiry email 1`] = `
  Your application for under £10,000 isn’t finished yet
 We noticed you started applying for Example project name, but haven’t finished yet. 
 
- You have until 1 June, 2050 12:00 to finish your application 
+ You have until 1 June, 2050 12:00pm to finish your application 
 If you don’t complete it before that time, we’ll delete it, so we can keep your data safe. 
 
  How to finish your application
@@ -33,7 +33,7 @@ Hello,
  Your application for under £10,000 isn’t finished yet
 We noticed you started applying for Example project name, but haven’t finished yet. 
 
- You have until 1 June, 2050 12:00 to finish your application 
+ You have until 1 June, 2050 12:00pm to finish your application 
 If you don’t complete it before that time, we’ll delete it, so we can keep your data safe. 
 
  How to finish your application
@@ -58,7 +58,7 @@ Helo,
  Nid yw'ch cais am lai na £10,000 wedi'i orffen eto
 Fe sylweddolom eich bod wedi dechrau ymgeisio am Example project name, ond heb orffen eich cais. 
 
- Mae gennych tan 1 Mehefin, 2050 12:00 i orffen eich cais 
+ Mae gennych tan 1 Mehefin, 2050 12:00pm i orffen eich cais 
 Os nad ydych yn ei gwblhau yn yr amser yna, byddwn yn ei ddileu, er mwyn i ni gadw eich data’n ddiogel. 
 
  Sut i orffen eich cais Mewngofnodi i’ch cyfrif
@@ -81,7 +81,7 @@ exports[`Your funding proposal expiry email 1`] = `
  Your funding proposal isn’t finished yet
 We noticed you started telling us about Example project name. But you haven’t finished yet. 
 
- You have until 1 June, 2050 12:00 to finish your funding proposal. 
+ You have until 1 June, 2050 12:00pm to finish your funding proposal. 
 If you don’t complete it before that time, we’ll delete it - so that we can keep your data safe. 
 
  How to finish your funding proposal
@@ -108,7 +108,7 @@ Hello,
  Your funding proposal isn’t finished yet
 We noticed you started telling us about Example project name. But you haven’t finished yet. 
 
- You have until 1 June, 2050 12:00 to finish your funding proposal. 
+ You have until 1 June, 2050 12:00pm to finish your funding proposal. 
 If you don’t complete it before that time, we’ll delete it - so that we can keep your data safe. 
 
  How to finish your funding proposal
@@ -130,7 +130,7 @@ Hello,
  Nid yw eich cynnig ariannu wedi gorffen eto
 Fe sylweddolom eich bod wedi dechrau dweud wrthym am Example project name. Ond nid ydych wedi gorffen eto. 
 
- Mae gennych tan 1 June, 2050 12:00 i orffen eich cynnig ariannu. 
+ Mae gennych tan 1 June, 2050 12:00pm i orffen eich cynnig ariannu. 
 Os nad ydych yn ei gwblhau yn yr amser yna, byddwn yn ei ddileu - er mwyn i ni allu cadw eich data yn ddiogel. 
 
  Sut i orffen eich cynnig ariannu

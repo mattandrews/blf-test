@@ -110,7 +110,9 @@
 
             {% if props.expiresAt %}
                 <div class="application-card__meta u-text-small">
-                    {{ __(cardCopy.expiresAt, formatDate(props.expiresAt)) | safe }}
+                    {% if props.projectCountry %}
+                        {{ __(cardCopy.expiresAt, formatDate(props.expiresAt)) | safe }}
+                    {% endif %}
                 </div>
             {% endif %}
 

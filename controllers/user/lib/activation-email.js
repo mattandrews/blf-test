@@ -43,7 +43,7 @@ module.exports = async function sendActivationEmail(req, user) {
                 loginUrl: localisedAbsoluteUrl(`/user/login`),
                 expiryDate: expiresAt
                     .locale(locale)
-                    .format('H:mm [on] dddd Do MMMM'),
+                    .format('h:mma [on] dddd Do MMMM'),
             },
         },
         mailParams

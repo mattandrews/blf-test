@@ -67,6 +67,23 @@ async function authorise() {
     return new Salesforce(resultJson.instance_url, resultJson.access_token);
 }
 
+async function sandboxAuthorise() {
+    const AUTH_URL = `https://${SALESFORCE_AUTH.apiUrl}/services/oauth2/token`;
+    const resultJson = await request.post({
+        url: AUTH_URL,
+        json: true,
+        form: {
+            grant_type: 'password',
+            client_id: SALESFORCE_AUTH.sandboxConsumerKey,
+            client_secret: SALESFORCE_AUTH.sandboxConsumerSecret,
+            username: SALESFORCE_AUTH.sandboxUsername,
+            password: `${SALESFORCE_AUTH.password}${SALESFORCE_AUTH.sandboxToken}`,
+        },
+    });
+
+    return new Salesforce(resultJson.instance_url, resultJson.access_token);
+}
+
 function checkStatus() {
     return request({
         url: `https://api.status.salesforce.com/v1/instances/${SALESFORCE_AUTH.instanceId}/status`,
@@ -77,5 +94,6 @@ function checkStatus() {
 
 module.exports = {
     authorise,
+    sandboxAuthorise,
     checkStatus,
 };

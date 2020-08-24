@@ -15,7 +15,7 @@ test('valid field', function () {
     const badInput = 'not.a.real-email@bad';
 
     field.withValue(goodInput);
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
     expect(field.displayValue).toBe(goodInput);
 
     field.withValue(badInput);
@@ -30,5 +30,5 @@ test('optional field', function () {
         name: 'example',
         isRequired: false,
     });
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 });

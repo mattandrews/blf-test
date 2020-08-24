@@ -26,7 +26,7 @@ test('TextareaField', function () {
     expect(field.displayValue).toEqual(
         `${goodValue}\n\n${minWords + 1}/${maxWords} words`
     );
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 
     field.withValue(faker.lorem.words(minWords - 1));
     expect(field.validate().error.message).toEqual(
@@ -35,7 +35,7 @@ test('TextareaField', function () {
 
     field.withValue(faker.lorem.words(maxWords + 1));
     expect(field.validate().error.message).toEqual(
-        expect.stringContaining(`must have less than ${maxWords} words`)
+        expect.stringContaining(`must have no more than ${maxWords} words`)
     );
 
     const optionalField = new TextareaField({
@@ -48,7 +48,7 @@ test('TextareaField', function () {
         messages: [{ type: 'base', message: 'Enter a value' }],
     });
 
-    expect(optionalField.validate().error).toBeNull();
+    expect(optionalField.validate().error).toBeUndefined();
 });
 
 test('required properties', function () {

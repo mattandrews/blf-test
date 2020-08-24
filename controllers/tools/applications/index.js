@@ -2,8 +2,6 @@
 const express = require('express');
 const get = require('lodash/get');
 
-const { DATA_STUDIO_UNDER10K_URL } = require('../../../common/secrets');
-
 const { initApplicationStatsRouter } = require('./router');
 
 const router = express.Router();
@@ -20,7 +18,6 @@ router.use(
             'National Lottery Awards for All',
             'Apply for funding under £10,000',
         ],
-        dataStudioUrl: DATA_STUDIO_UNDER10K_URL,
     })
 );
 

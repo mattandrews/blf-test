@@ -19,7 +19,7 @@ test('valid field', function () {
 
     field.withValue('option-1');
     expect(field.displayValue).toBe('Option 1');
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 
     field.withValue('bad-option');
     expect(field.validate().error.message).toEqual(

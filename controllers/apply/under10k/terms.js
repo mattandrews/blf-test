@@ -204,8 +204,8 @@ function englandTerms() {
                 and let us know promptly about any fraud, other impropriety,
                 mismanagement or misuse in relation to the grant;`,
 
-                oneLine`acknowledge the funding using the relevant brand
-                guidelines in your award email;`,
+                oneLine`acknowledge National Lottery funding using our logo in accordance with the relevant 
+                guidelines for recognising your grant, which can be found on our website <a href="https://www.tnlcommunityfund.org.uk/">https://www.tnlcommunityfund.org.uk/</a>;`,
 
                 oneLine`hold the grant in a UK based bank or building society
                 account which satisfies our requirements as set out in guidelines
@@ -254,12 +254,9 @@ function englandTerms() {
                 </ul>                
                 `,
 
-                oneLine`acknowledge that DCMS may carry out post-grant assurance
-                checks to ensure that grants funded under our Covid-19 funding
-                have been spent in accordance with these terms and conditions and
-                they may contact you about this after the grant has been made or spent;`,
-
-                oneLine`comply with data protection laws`,
+                oneLine`comply with data protection laws and obtain the consent of your beneficiaries
+                for us and you to receive and process their personal information and
+                contact them in connection with the project;`,
 
                 oneLine`keep accurate and comprehensive records about your
                 project both during the project and for seven years afterwards
@@ -303,12 +300,11 @@ function englandTerms() {
                 receive or fail to declare any duplicate funding for the same
                 project costs as funded by the grant.`,
 
-                oneLine`You provide us with false or misleading information
-                either on application or after award of the grant, act
-                dishonestly or are under investigation by us, a regulatory
-                body or the police, or if we consider for any other reason
-                that public funds are at risk or you do anything to bring
-                us or the Coronavirus Community Support Fund into disrepute.`,
+                oneLine`You provide us with false or misleading information either
+                on application or after award of the grant, act dishonestly or are under
+                investigation by us, a regulatory body or the police, or if we consider for
+                any other reason that public funds are at risk or you do
+                anything to bring us or the National Lottery into disrepute.`,
 
                 oneLine`You enter into, or in our view are likely to enter into,
                 administration, liquidation, receivership, dissolution or,
@@ -327,30 +323,28 @@ function englandTerms() {
         {
             title: `You acknowledge that:`,
             clauses: [
-                oneLine`the grant is for your use only and we may require you to
-                pay us a share of any proceeds from disposal of assets purchased
-                or enhanced with the grant; `,
+                oneLine`the grant is for your use only and we may require you to pay us a share
+                of any proceeds from disposal of assets purchased or enhanced with the grant; `,
 
-                oneLine`we will not increase the grant if you spend more than the agreed budget;`,
+                oneLine`we will not increase the grant if you spend more than the agreed budget
+                and we can only guarantee the grant as long as The National Lottery
+                continues to operate and we receive sufficient funds from it;`,
 
-                oneLine`the grant is not consideration for any taxable supply for VAT purposes;`,
+                oneLine`the grant is not consideration for any taxable supply for VAT purposes; `,
 
-                oneLine`we have no liability for any costs or consequences incurred
-                by you or third parties that arise directly or indirectly from the
-                project, nor from non-payment or withdrawal of the grant,
-                save to the extent required by law;`,
+                oneLine`we have no liability for any costs or consequences incurred by you or
+                third parties that arise directly or indirectly from the project, nor from
+                non-payment or withdrawal of the grant, save to the extent required by law; `,
 
-                oneLine`these terms and conditions will continue to apply
-                for one year after the grant is paid or until the project has
-                been completed or until post-grant assurance activities have
-                been completed, whichever is later.
-                Clauses 1.2, 1.4, 1.6, 1.9, 1.10, 1.11, 2, 3.4 and 3.5 shall
-                survive expiry of these terms and conditions; and`,
+                oneLine`these Terms and Conditions will continue to apply, unless terminated 
+                earlier in accordance with Clause 2, for one year after the grant is paid
+                or until the project has been completed, whichever is later. Clauses
+                1.2, 1.3, 1.4, 1.6, 1.8, 1.9, 1.10, 1.11, 1.12, 1.13, 2.1, 2.3, 2.4, 2.5, 2.6, 3.1, 3.4, 3.5 and 3.6
+                shall survive expiry of these Terms and Conditions; and`,
 
                 oneLine`if the application and grant award are made electronically,
-                the agreement between us shall be deemed to be in writing and your
-                online acceptance of these Terms and Conditions shall be deemed
-                to be a signature of that agreement.`,
+                the agreement between us shall be deemed to be in writing and your online
+                acceptance of these Terms and Conditions shall be deemed to be a signature of that agreement.`,
             ],
         },
     ];

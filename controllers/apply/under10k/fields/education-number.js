@@ -2,26 +2,20 @@
 const get = require('lodash/fp/get');
 
 const { EDUCATION_NUMBER_TYPES, FREE_TEXT_MAXLENGTH } = require('../constants');
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
+const Field = require('../../lib/field-types/field');
+
+const { stripUnlessOrgTypes } = require('./organisation-type');
 
 module.exports = function (locale) {
     const localise = get(locale);
-
-    function stripUnlessOrgTypes(types, schema) {
-        return Joi.when(Joi.ref('organisationType'), {
-            is: Joi.exist().valid(types),
-            then: schema,
-            otherwise: Joi.any().strip(),
-        });
-    }
-
-    return {
+    return new Field({
+        locale: locale,
         name: 'educationNumber',
         label: localise({
             en: 'Department for Education number',
             cy: 'Eich rhif Adran Addysg',
         }),
-        type: 'text',
         isRequired: true,
         schema: stripUnlessOrgTypes(
             EDUCATION_NUMBER_TYPES,
@@ -43,5 +37,5 @@ module.exports = function (locale) {
                 }),
             },
         ],
-    };
+    });
 };

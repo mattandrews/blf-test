@@ -2,7 +2,7 @@
 'use strict';
 const { Model, Op } = require('sequelize');
 const moment = require('moment');
-const Postcode = require('postcode');
+const { toOutcode } = require('postcode');
 
 class OrderItem extends Model {
     static init(sequelize, DataTypes) {
@@ -84,7 +84,7 @@ class Order extends Model {
                 {
                     grantAmount: grantAmount,
                     orderReason: orderReason,
-                    postcodeArea: Postcode.toOutcode(postcode),
+                    postcodeArea: toOutcode(postcode),
                     items: items,
                 },
                 { include: [{ model: OrderItem, as: 'items' }] }

@@ -1,6 +1,6 @@
 'use strict';
 const uniq = require('lodash/uniq');
-const Joi = require('../joi-extensions');
+const Joi = require('../joi-extensions-next');
 
 const Field = require('./field');
 
@@ -43,7 +43,7 @@ class SelectField extends Field {
 
     defaultSchema() {
         const baseSchema = Joi.string().valid(
-            this.normalisedOptions.map((option) => option.value)
+            ...this.normalisedOptions.map((option) => option.value)
         );
 
         if (this.isRequired) {

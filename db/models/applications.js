@@ -480,7 +480,7 @@ class ApplicationEmailQueue extends Model {
             where: {
                 status: { [Op.eq]: 'NOT_SENT' },
                 dateToSend: {
-                    [Op.lte]: moment().toDate(),
+                    [Op.lte]: moment().endOf('day').toDate(),
                 },
             },
             include: [
@@ -496,10 +496,10 @@ class ApplicationEmailQueue extends Model {
         });
     }
 
-    static updateStatusToSent(queueId) {
+    static updateStatus(queueId, newStatus = 'SENT') {
         return this.update(
             {
-                status: 'SENT',
+                status: newStatus,
             },
             { where: { id: { [Op.eq]: queueId } } }
         );

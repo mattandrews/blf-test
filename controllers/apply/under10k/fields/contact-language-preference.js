@@ -1,16 +1,17 @@
 'use strict';
 const get = require('lodash/fp/get');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
+const RadioField = require('../../lib/field-types/radio');
 
 module.exports = function (locale, props) {
     const localise = get(locale);
     const defaultProps = {
+        locale: locale,
         label: localise({
             en: `What language should we use to contact this person?`,
             cy: `Pa iaith y dylem ei ddefnyddio i gysylltu â’r person hwn?`,
         }),
-        type: 'radio',
         options: [
             {
                 value: 'english',
@@ -32,7 +33,7 @@ module.exports = function (locale, props) {
             return Joi.when('projectCountry', {
                 is: 'wales',
                 then: Joi.string()
-                    .valid(this.options.map((option) => option.value))
+                    .valid(...this.options.map((option) => option.value))
                     .required(),
                 otherwise: Joi.any().strip(),
             });
@@ -47,5 +48,5 @@ module.exports = function (locale, props) {
             },
         ],
     };
-    return { ...defaultProps, ...props };
+    return new RadioField({ ...defaultProps, ...props });
 };

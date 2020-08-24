@@ -7,10 +7,11 @@
 {% from "components/programmes.njk" import programmeCard with context %}
 {% from "components/promo-card/macro.njk" import promoCard with context %}
 {% from "components/table-of-contents/macro.njk" import tableOfContents %}
+{% from "components/message/macro.njk" import message with context %}
 
 {% set flexAnchor = 'item' %}
 
-{% macro flexibleContent(flexibleContent, children = null, breadcrumbs = null, distinguishBlocks = true) %}
+{% macro flexibleContent(flexibleContent, children = null, breadcrumbs = null, distinguishBlocks = true, notificationBanner = null) %}
     {% if flexibleContent.length > 0 %}
         {% set mediaAsideCycler = cycler(true, false) %}
 
@@ -90,6 +91,13 @@
                 <section class="{% if distinguishBlocks %}content-box u-inner-wide-only{% endif %}" id="{{ flexAnchor + '-' + loop.index }}">
                     {% if (breadcrumbs and loop.first) %}
                         {{ breadcrumbs | safe }}
+                    {% endif %}
+
+                    {% if (notificationBanner and loop.first) %}
+                        {{ message(
+                            notificationBanner.title,
+                            notificationBanner.content
+                        ) }}
                     {% endif %}
 
                     {% if part.title %}

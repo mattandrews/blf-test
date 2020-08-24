@@ -17,15 +17,46 @@
 
             <h1 class="t--underline">“Did you find what you were looking for?”</h1>
 
-            {% if pathQuery %}
+            {% if pathQuery or dateRange %}
                 <p>
-                    Showing results for <code>{{ pathQuery }}</code>,
+                    {% if pathQuery %}
+                        Showing results for <code>{{ pathQuery }}</code>,
+                    {% endif %}
+                    {% if dateRange %}
+                        {{ formatDate(dateRange.start) }}–{{ formatDate(dateRange.end) }}
+                    {% endif %}
                     <a href="?">clear selection?</a>
                 </p>
             {% endif %}
 
+            <form action="" method="get" class="tools-filter-form">
+                <div class="tools-filter-form__item">
+                    <label for="start" class="ff-label">Start date</label>
+                    <input class="ff-text"
+                           type="date"
+                           max="{{ formatDate(now, "YYYY-MM-DD") }}"
+                           value="{{ formatDate(dateRange.start, "YYYY-MM-DD") }}"
+                           name="start"
+                           id="start"
+                    >
+                </div>
+                <div class="tools-filter-form__item">
+                    <label for="end" class="ff-label">End date</label>
+                    <input class="ff-text"
+                           type="date"
+                           max="{{ formatDate(now, "YYYY-MM-DD") }}"
+                           value="{{ formatDate(dateRange.end, "YYYY-MM-DD") }}"
+                           name="end"
+                           id="end"
+                    >
+                </div>
+                <div class="tools-filter-form__item tools-filter-form__actions">
+                    <input class="btn btn--small" type="submit" value="Filter by date"/>
+                </div>
+            </form>
+
             <div class="u-margin-bottom-l">
-                <h2 class="u-no-margin">In the last 30 days:</h2>
+                <h2 class="u-no-margin">Overall totals</h2>
                 {{ statsGrid([{
                     value: survey.recentStats.percentageYes + '%',
                     title: 'of respondents said “yes”',
@@ -42,12 +73,12 @@
             </div>
 
             <div class="u-margin-bottom-l">
-                <h2>In the last 3 months:</h2>
+                <h2>Responses over time</h2>
 
-                <p><small>Percentage who said “yes” based on <strong>{{ survey.totalResponses | numberWithCommas }} responses</strong> in the last 3 months.</small></p>
+                <p><small>Percentage who said “yes” based on <strong>{{ survey.totalResponses | numberWithCommas }} responses</strong> between {{ formatDate(dateRange.start) }}–{{ formatDate(dateRange.end) }}</small></p>
 
                 <div class="u-margin-bottom">
-                    <canvas id="js-chart" height="150"></canvas>
+                    <canvas id="js-chart" height="220"></canvas>
                 </div>
 
                 {% if not pathQuery %}
@@ -55,8 +86,12 @@
                     <div class="s-prose">
                         <ol>
                             {% for item in survey.pageCounts | take(10) %}
-                                <li><a href="?path={{ item.path }}">{{ item.path }}
-                                with {{ item.count | numberWithCommas }} responses</a></li>
+                                <li>
+                                    <a href="?path={{ item.path }}">
+                                        {{ item.path }}
+                                        ({{ item.count | numberWithCommas }} responses)
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ol>
                     </div>
@@ -65,8 +100,12 @@
                     <div class="s-prose">
                         <ol>
                             {% for item in survey.pageCountsWithResponses | take(10) %}
-                                <li><a href="?path={{ item.path }}">{{ item.path }}
-                                with {{ item.count | numberWithCommas }} responses</a></li>
+                                <li>
+                                    <a href="?path={{ item.path }}">
+                                        {{ item.path }}
+                                        ({{ item.count | numberWithCommas }} responses)
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ol>
                     </div>
@@ -146,16 +185,16 @@
                         },
                         time: {
                             round: 'day',
-                            unit: 'month'
+                            unit: 'day'
                         },
                         gridLines: {
-                            display: false
+                            display: true
                         }
                     }],
                     yAxes: [{
                         display: true,
                         ticks: {
-                            stepSize: 25,
+                            stepSize: 10,
                             min: 0,
                             max: 100,
                             callback: function(value) {

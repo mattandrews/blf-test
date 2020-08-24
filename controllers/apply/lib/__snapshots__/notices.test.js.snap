@@ -26,29 +26,3 @@ Array [
   },
 ]
 `;
-
-exports[`show for pending under £10,000 application in England 1`] = `
-Array [
-  Object {
-    "body": "If you've started an application already, and it's not related to supporting your community or organisation through the pandemic, we won't be able to fund it. But you could decide to start a new one that focuses on COVID-19 instead.",
-    "title": "For funding under £10,000 in England, we're now only accepting COVID-19 related applications",
-  },
-  Object {
-    "body": "So in England we're only funding voluntary and community organisations for the time being.",
-    "title": "We've also changed our eligibility criteria to help communities through the pandemic",
-  },
-]
-`;
-
-exports[`show for pending under £10,000 application in England 2`] = `
-Array [
-  Object {
-    "body": "Os ydych chi wedi cychwyn cais yn barod, ac nad yw'n gysylltiedig â chefnogi'ch cymuned neu sefydliad trwy'r pandemig, ni fyddwn yn gallu ei dderbyn. Ond fe allech chi benderfynu cychwyn un newydd sy'n canolbwyntio ar COVID-19 yn lle.",
-    "title": "Ar gyfer ariannu o dan £10,000 yn Lloegr, dim ond ceisiadau cysylltiedig â COVID-19 yr ydym yn eu derbyn",
-  },
-  Object {
-    "body": "So in England we're only funding voluntary and community organisations for the time being.",
-    "title": "We've also changed our eligibility criteria to help communities through the pandemic",
-  },
-]
-`;

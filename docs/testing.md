@@ -1,6 +1,6 @@
 # Testing
 
-We rely on a number of different tools for testing our code.
+We rely on a number of different tools for testing our code. Please ensure that you write new tests when adding non-trivial new code, update existing tests when modifying functionality, and remove outdated tests which are no longer in use. Our confidence in a quick release cycle is built on top of these tests so if they become outdated and unreliable then our users' experience is likely to become unreliable, too. 
 
 ## Linting
 

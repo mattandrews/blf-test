@@ -4,7 +4,7 @@ const mime = require('mime-types');
 const fileSize = require('filesize');
 
 const Field = require('./field');
-const Joi = require('../joi-extensions');
+const Joi = require('../joi-extensions-next');
 
 class FileField extends Field {
     constructor(props) {
@@ -12,22 +12,24 @@ class FileField extends Field {
 
         this.labelExisting = props.labelExisting || null;
 
-        const maxFileSize = {
+        this.maxFileSize = {
             value: 12 * 1048576,
             label: '12MB',
         };
 
-        const supportedFileTypes = [
+        this.supportedFileTypes = [
             { mime: 'image/png', label: 'PNG' },
             { mime: 'image/jpeg', label: 'JPEG' },
             { mime: 'application/pdf', label: 'PDF' },
         ];
 
-        const supportedMimeTypes = supportedFileTypes.map((type) => type.mime);
+        this.supportedMimeTypes = this.supportedFileTypes.map(
+            (type) => type.mime
+        );
 
         this.attributes = Object.assign(
             {},
-            { accept: supportedMimeTypes.join(',') },
+            { accept: this.supportedMimeTypes.join(',') },
             props.attributes
         );
 
@@ -35,15 +37,18 @@ class FileField extends Field {
 
         this.schema = Joi.object({
             filename: Joi.string().required(),
-            size: Joi.number().max(maxFileSize.value).required(),
-            type: Joi.string().valid(supportedMimeTypes).required(),
+            size: Joi.number().max(this.maxFileSize.value).required(),
+            type: Joi.string()
+                .valid(...this.supportedMimeTypes)
+                .required(),
         }).required();
+    }
 
-        const typeList = supportedFileTypes
+    defaultMessages() {
+        const typeList = this.supportedFileTypes
             .map((type) => type.label)
             .join(', ');
-
-        this.messages = [
+        return [
             {
                 type: 'any.allowOnly',
                 message: this.localise({
@@ -54,11 +59,11 @@ class FileField extends Field {
             {
                 type: 'number.max',
                 message: this.localise({
-                    en: `Please upload a file below ${maxFileSize.label}`,
-                    cy: `Uwch lwythwch ffeil isod ${maxFileSize.label}`,
+                    en: `Please upload a file below ${this.maxFileSize.label}`,
+                    cy: `Uwch lwythwch ffeil isod ${this.maxFileSize.label}`,
                 }),
             },
-        ].concat(props.messages || []);
+        ];
     }
 
     getType() {

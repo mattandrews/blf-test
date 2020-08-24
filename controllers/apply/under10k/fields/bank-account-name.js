@@ -1,13 +1,15 @@
 'use strict';
 const get = require('lodash/fp/get');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
 const { FREE_TEXT_MAXLENGTH } = require('../constants');
+const Field = require('../../lib/field-types/field');
 
 module.exports = function (locale) {
     const localise = get(locale);
 
-    return {
+    return new Field({
+        locale: locale,
         name: 'bankAccountName',
         label: localise({
             en: `Tell us the name of your organisation - as it appears on the bank statement`,
@@ -17,7 +19,6 @@ module.exports = function (locale) {
             en: `Not the name of your bank`,
             cy: `Nid enw eich banc`,
         }),
-        type: 'text',
         attributes: { autocomplete: 'off' },
         isRequired: true,
         schema: Joi.string().max(FREE_TEXT_MAXLENGTH.large).required(),
@@ -37,5 +38,5 @@ module.exports = function (locale) {
                 }),
             },
         ],
-    };
+    });
 };

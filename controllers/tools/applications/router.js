@@ -136,7 +136,6 @@ function initApplicationStatsRouter({
     title,
     getProjectCountry,
     feedbackDescriptions,
-    dataStudioUrl,
 }) {
     const router = express.Router();
 
@@ -282,7 +281,6 @@ function initApplicationStatsRouter({
                 countryColour: country
                     ? getColourForCountry(titleCase(country))
                     : null,
-                dataStudioUrl: dataStudioUrl,
                 feedback: feedback,
             });
         } catch (error) {

@@ -5,6 +5,7 @@
 {% from "components/hero.njk" import hero with context %}
 {% from "components/page-title/macro.njk" import pageTitle %}
 {% from "components/programmes.njk" import programmeStats with context %}
+{% from "components/message/macro.njk" import message with context %}
 
 {% if not pageHero %}{% set bodyClass = 'has-static-header' %}{% endif %}
 
@@ -28,6 +29,11 @@
         {% endcall %}
 
         <div class="u-inner-wide-only">
+
+            {% if entry.notificationBanner %}
+                {{ message(entry.notificationBanner.title, entry.notificationBanner.content) }}
+            {% endif %}
+
             {% if entry.contentSections.length > 1 %}
                 {% set tabItems = [] %}
                 {% for section in entry.contentSections -%}

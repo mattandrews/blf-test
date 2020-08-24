@@ -82,6 +82,8 @@ global:
       href: "/welsh/about/customer-service/corporate-documents"
     - label: Cyfleoedd tendro
       href: "/welsh/about/customer-service/supplier-zone"
+    - label: Diogelu
+      href: "/welsh/about/customer-service/safeguarding"
     - label: Polisi Preifatrwydd
       href: "/welsh/about/customer-service/privacy-policy"
     - label: Cwcis
@@ -455,7 +457,7 @@ funding:
             - Rhowch gynnig ar chwiliad gwahanol neu cliriwch eich hidlyddion
             -	Ceisiwch chwilio am rywbeth llai penodol - weithiau gallai defnyddio term chwilio mwy cyffredinol helpu
             -	Gwiriwch sillafu unrhyw allweddeiriau rydych yn eu chwilio'n ofalus
-            -	'Efallai nad fydd gan ein cronfa ddata fanylion grantiau a ddyfarnwyd o fewn y mis diwethaf. Gwiriwch ein <a href="/welsh/news-and-events">hadran newyddion</a> os ydych yn chwilio am grant a ddyfarnwyd yn ddiweddar'
+            -	'Efallai nad fydd gan ein cronfa ddata fanylion grantiau a ddyfarnwyd o fewn y mis diwethaf. Gwiriwch ein <a href="/welsh/news">hadran newyddion</a> os ydych yn chwilio am grant a ddyfarnwyd yn ddiweddar'
           otherOptions: >
             Os ydych yn chwilio am rywbeth penodol ac fe hoffech gael cymorth <a href="/welsh/contact">cysylltwch â ni</a>.
         postcode: Roedd y côd post a nodoch yn annilys - rhowch gynnig ar un arall.

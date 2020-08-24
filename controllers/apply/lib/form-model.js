@@ -4,14 +4,12 @@ const find = require('lodash/find');
 const findIndex = require('lodash/findIndex');
 const findLastIndex = require('lodash/findLastIndex');
 const get = require('lodash/fp/get');
-const has = require('lodash/has');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const reduce = require('lodash/reduce');
 
-const Joi = require('@hapi/joi');
+const Joi = require('@hapi/joiNext');
 
-const { formatterFor } = require('./formatters');
 const normaliseErrors = require('./normalise-errors');
 
 class FormModel {
@@ -28,30 +26,7 @@ class FormModel {
         const validation = this.validate(data);
         this.validation = validation;
 
-        /**
-         * Enrich field
-         * Assign current value and errors to field if present
-         */
         function enrichField(field) {
-            const fieldValue = find(data, (value, name) => name === field.name);
-            if (fieldValue) {
-                field.value = fieldValue;
-                field.displayValue = formatterFor(field, locale)(fieldValue);
-            }
-
-            function messageMatchesField(message) {
-                return message.param === field.name;
-            }
-
-            field.errors = validation.messages.filter(messageMatchesField);
-            field.featuredErrors = validation.featuredMessages.filter(
-                messageMatchesField
-            );
-
-            return field;
-        }
-
-        function enrichFieldClass(field) {
             field.withValue(find(data, (value, name) => name === field.name));
 
             field.withErrors(
@@ -74,11 +49,7 @@ class FormModel {
 
             section.steps = section.steps.map(function (step, stepIndex) {
                 step.fieldsets = step.fieldsets.map((fieldset) => {
-                    fieldset.fields = fieldset.fields.map((field) => {
-                        return has(field, '_isClass')
-                            ? enrichFieldClass(field)
-                            : enrichField(field);
-                    });
+                    fieldset.fields = fieldset.fields.map(enrichField);
                     return fieldset;
                 });
 
@@ -136,7 +107,8 @@ class FormModel {
          */
         const formIsEmpty = isEmpty(this.validation.value);
         this.progress = {
-            isComplete: formIsEmpty === false && this.validation.error === null,
+            isComplete:
+                formIsEmpty === false && this.validation.error === undefined,
             isPristine: formIsEmpty === true,
             sectionsComplete: this.sections.filter(
                 (section) => section.progress.status === 'complete'
@@ -212,7 +184,7 @@ class FormModel {
         return {
             value: value,
             error: error,
-            isValid: error === null && messages.length === 0,
+            isValid: error === undefined && messages.length === 0,
             messages: messages,
             featuredMessages: this._getFeaturedMessages(messages),
         };

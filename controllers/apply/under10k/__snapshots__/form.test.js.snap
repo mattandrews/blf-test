@@ -23,13 +23,13 @@ Array [
   "organisationType: Select a type of organisation",
   "accountingYearDate: Enter a day and month",
   "totalIncomeYear: Enter a total income for the year (eg. a whole number with no commas or decimal points)",
-  "mainContactName: Enter first and last name",
   "mainContactDateOfBirth: Enter a date of birth",
   "mainContactAddress: Enter a full UK address",
   "mainContactAddressHistory: Enter a full UK address",
   "mainContactPhone: Enter a UK telephone number",
   "seniorContactRole: Choose a role",
   "seniorContactName: Enter first and last name",
+  "mainContactName: Enter first and last name",
   "seniorContactDateOfBirth: Enter a date of birth",
   "seniorContactAddress: Enter a full UK address",
   "seniorContactAddressHistory: Enter a full UK address",
@@ -117,15 +117,13 @@ Array [
   "yourIdeaCommunity: Answer must be no more than 200 words",
   "projectBudget: Costs you would like us to fund must be less than £10,000",
   "projectTotalCosts: Total cost must be the same as or higher than the amount you’re asking us to fund",
-  "mainContactName: Main contact name must be different from the senior contact's name",
   "mainContactDateOfBirth: Must be at least 16 years old",
   "mainContactAddress: Main contact address must be different from the senior contact's address",
   "mainContactAddressHistory: Enter a full UK address",
   "mainContactPhone: Enter a real UK telephone number",
-  "seniorContactRole: Senior contact role is not valid",
-  "seniorContactName: Senior contact name must be different from the main contact's name",
+  "seniorContactRole: Choose a role",
+  "mainContactName: Main contact name must be different from the senior contact's name",
   "seniorContactDateOfBirth: Must be at least 18 years old",
-  "seniorContactAddress: Senior contact address must be different from the main contact's address",
   "seniorContactAddressHistory: Enter a full UK address",
   "mainContactEmail: Main contact email address must be different from the senior contact's email address",
   "seniorContactPhone: Enter a real UK telephone number",
@@ -134,9 +132,8 @@ Array [
 
 exports[`invalid form 2`] = `
 Array [
-  "Main contact name must be different from the senior contact's name",
   "Enter a real UK telephone number",
-  "Senior contact role is not valid",
+  "Main contact name must be different from the senior contact's name",
   "Main contact email address must be different from the senior contact's email address",
 ]
 `;

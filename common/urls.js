@@ -2,7 +2,11 @@
 const { URL } = require('url');
 const querystring = require('querystring');
 
-const WELSH_REGEX = /^\/welsh(\/|$)/;
+// Match a URL path which begins with /welsh and is followed by either:
+// - a slash (eg. /welsh/contact)
+// - the end of the path (eg. /welsh)
+// - a query string (eg. /welsh?x-craft-preview=...)
+const WELSH_REGEX = /^\/welsh(\/|$|\?)/;
 
 const isAbsoluteUrl = (str) => str.indexOf('://') !== -1;
 

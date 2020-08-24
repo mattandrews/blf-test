@@ -15,7 +15,7 @@ test('valid field', function () {
     const badValue = '0345 444';
 
     field.withValue(goodValue);
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
     expect(field.validate().value).toBe('028 9568 0143');
 
     field.withValue(badValue);
@@ -31,8 +31,8 @@ test('optional field', function () {
         isRequired: false,
     });
 
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 
     field.withValue('');
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 });

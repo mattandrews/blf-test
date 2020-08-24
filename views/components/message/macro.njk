@@ -1,0 +1,6 @@
+{% macro message(title, body) %}
+    <div class="message message--info" role="alert">
+        <h2 class="t4 u-no-margin">{{ title }}</h2>
+        {{ body | safe }}
+    </div>
+{% endmacro %}

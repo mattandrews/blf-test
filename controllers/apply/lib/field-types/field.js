@@ -1,13 +1,10 @@
 'use strict';
 const get = require('lodash/fp/get');
 const isFunction = require('lodash/isFunction');
-const Joi = require('../joi-extensions');
+const Joi = require('../joi-extensions-next');
 
 class Field {
     constructor(props) {
-        // Used to switch on non-class type fields
-        this._isClass = true;
-
         if (props.name) {
             this.name = props.name;
         } else {
@@ -46,16 +43,7 @@ class Field {
 
         this.schema = this.withCustomSchema(props.schema);
 
-        this.messages = this.defaultMessages().concat(props.messages || []);
-
-        if (
-            this.isRequired &&
-            this.messages.some((message) => message.type === 'base') === false
-        ) {
-            throw new Error(
-                'Required fields must provide a base error message'
-            );
-        }
+        this.suppliedMessages = props.messages;
 
         this.warnings = props.warnings || [];
 
@@ -99,10 +87,27 @@ class Field {
     }
 
     /**
-     * Allow sub-classes to provide a default messages
+     * Allow sub-classes to provide default messages
      */
     defaultMessages() {
         return [];
+    }
+
+    get messages() {
+        const allMessages = this.defaultMessages().concat(
+            this.suppliedMessages || []
+        );
+
+        if (
+            this.isRequired &&
+            allMessages.some((message) => message.type === 'base') === false
+        ) {
+            throw new Error(
+                'Required fields must provide a base error message'
+            );
+        }
+
+        return allMessages;
     }
 
     /**

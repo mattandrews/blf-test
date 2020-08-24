@@ -569,7 +569,7 @@ function under10KApplication(mock) {
             .trigger('change');
 
         cy.findByLabelText(
-            'How does your project meet at least one of our funding priorities?'
+            'How does your project meet our funding priority?'
         )
             .invoke('val', faker.lorem.words(100))
             .trigger('change');

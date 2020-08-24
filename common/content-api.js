@@ -146,6 +146,15 @@ class ContentApiClient {
         });
     }
 
+    getRedirect(urlPath) {
+        return this.queryContentApi
+            .get(`v1/en/redirect`, {
+                searchParams: { path: urlPath },
+            })
+            .json()
+            .then(getAttrs);
+    }
+
     getHeroImage({ locale, slug }) {
         return this.queryContentApi(`v1/${locale}/hero-image/${slug}`)
             .json()

@@ -17,7 +17,7 @@ test('empty form', () => {
 test('valid form', () => {
     const data = mockResponse();
     const result = formBuilder({ data }).validation;
-    expect(result.error).toBeNull();
+    expect(result.error).toBeUndefined();
 
     expect(result.value).toMatchSnapshot({
         yourIdeaProject: expect.any(String),
@@ -118,7 +118,7 @@ test('organisation sub-type required for statutory-body', function () {
         organisationSubType: 'fire-service',
     });
     const result = formBuilder({ data: validData }).validation;
-    expect(result.error).toBeNull();
+    expect(result.error).toBeUndefined();
 });
 
 test('language preference required in wales', function () {
@@ -139,7 +139,7 @@ test('language preference required in wales', function () {
         }),
     });
 
-    expect(formValid.validation.error).toBeNull();
+    expect(formValid.validation.error).toBeUndefined();
 
     const formStrip = formBuilder({
         data: mockResponse({
@@ -163,5 +163,5 @@ test.each([
 
     const expected = omit(data, fieldName);
     const result = form.validate(expected);
-    expect(result.error).toBeNull();
+    expect(result.error).toBeUndefined();
 });

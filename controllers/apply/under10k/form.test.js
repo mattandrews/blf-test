@@ -111,7 +111,7 @@ test('valid form for england', () => {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test('valid form for scotland', () => {
@@ -122,7 +122,7 @@ test('valid form for scotland', () => {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test('valid form for wales', () => {
@@ -137,7 +137,7 @@ test('valid form for wales', () => {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     // Test for existence of country specific fields
     expect(form.getCurrentFields().map((field) => field.name)).toEqual(
@@ -159,7 +159,7 @@ test('valid form for northern-ireland', () => {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     // Test for existence of country specific fields
     expect(form.getCurrentFields().map((field) => field.name)).toEqual(
@@ -185,7 +185,7 @@ test('valid form for unregistered-vco', function () {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test('valid form for unincorporated-registered-charity', function () {
@@ -197,7 +197,7 @@ test('valid form for unincorporated-registered-charity', function () {
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     expect(mapRegistrationFieldNames(form)).toEqual(['charityNumber']);
 
@@ -224,7 +224,7 @@ test('valid form for charitable-incorporated-organisation', function () {
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     expect(mapRegistrationFieldNames(form)).toEqual(['charityNumber']);
 
@@ -262,8 +262,8 @@ test('valid form for not-for-profit-company', function () {
         }),
     });
 
-    expect(form.validation.error).toBeNull();
-    expect(formWithCharityNumber.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
+    expect(formWithCharityNumber.validation.error).toBeUndefined();
 
     expect(mapRegistrationFieldNames(form)).toEqual([
         'companyNumber',
@@ -295,7 +295,7 @@ test('valid form for community-interest-company', function () {
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     expect(mapRegistrationFieldNames(form)).toEqual(['companyNumber']);
 
@@ -327,7 +327,7 @@ test('valid form for school', function () {
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const invalidData = mockResponse({
         organisationType: 'school',
@@ -359,7 +359,7 @@ test('valid form for college-or-university', function () {
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const invalidData = mockResponse({
         organisationType: 'college-or-university',
@@ -394,7 +394,7 @@ test('valid form for statutory-body', function () {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test.each(['school', 'college-or-university', 'statutory-body'])(
@@ -437,7 +437,7 @@ test('role can be free text for some statutory bodies', function () {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test('valid form for faith-group', function () {
@@ -448,7 +448,7 @@ test('valid form for faith-group', function () {
         }),
     });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const formWithCharityNumber = formBuilder({
         data: mockResponse({
@@ -458,7 +458,7 @@ test('valid form for faith-group', function () {
         }),
     });
 
-    expect(formWithCharityNumber.validation.error).toBeNull();
+    expect(formWithCharityNumber.validation.error).toBeUndefined();
 
     expect(mapRegistrationFieldNames(form)).toEqual(['charityNumber']);
 });
@@ -503,7 +503,7 @@ test('valid form for different trading names', function () {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const invalidData = mockResponse({
         organisationLegalName: 'Balloon Rides For Sad Polar Bears',
@@ -535,7 +535,7 @@ test('maintain backwards compatibility for date schema', function () {
         data: omit(mock, 'projectStartDateCheck'),
     });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     // Maintain backwards compatibility with salesforce schema
     const salesforceResult = form.forSalesforce();
@@ -580,7 +580,7 @@ test('start date defaults to current date if specifying as soon as possible', fu
         flags: { enableEnglandAutoEndDate: false },
     });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const salesforceResult = form.forSalesforce();
 
@@ -605,7 +605,7 @@ test('end date pre-filled to 6 months from now if specifying asap in England', f
 
     const form = formBuilder({ data });
 
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 
     const salesforceResult = form.forSalesforce();
 
@@ -659,7 +659,7 @@ test('start date must be at least 12 weeks away outside England when not support
             data: omit(validData, 'projectStartDateCheck'),
         });
 
-        expect(validForm.validation.error).toBeNull();
+        expect(validForm.validation.error).toBeUndefined();
     }
 
     expectStartDateForCountry({
@@ -742,7 +742,7 @@ test('allow only "other" option for beneficiary groups', () => {
     });
 
     const form = formBuilder({ data });
-    expect(form.validation.error).toBeNull();
+    expect(form.validation.error).toBeUndefined();
 });
 
 test('finance details required if organisation is over 15 months old', function () {
@@ -756,7 +756,7 @@ test('finance details required if organisation is over 15 months old', function 
     });
 
     const validForm = formBuilder({ data: validData });
-    expect(validForm.validation.error).toBeNull();
+    expect(validForm.validation.error).toBeUndefined();
 
     const invalidData = mockResponse({
         organisationStartDate: {

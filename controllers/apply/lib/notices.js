@@ -16,6 +16,7 @@ const enableStandardEnglandAutoProjectDuration = config.get(
 module.exports = {
     getNoticesAll(locale, pendingApplications = []) {
         const localise = get(locale);
+
         function showEnglandPrioritiesNotice() {
             // Only show notice for applications created before this date
             // @TODO this can be removed after 2020-08-12 as any applications
@@ -31,7 +32,9 @@ module.exports = {
             });
         }
 
+
         const notices = [];
+
 
         if (showEnglandPrioritiesNotice()) {
             notices.push({

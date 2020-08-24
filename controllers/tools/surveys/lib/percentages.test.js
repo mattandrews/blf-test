@@ -9,7 +9,7 @@ test('percentagesFor', function () {
     ];
 
     expect(percentagesFor(responses)).toEqual({
-        percentageYes: 91,
+        percentageYes: '90.9',
         yesCount: 500,
         noCount: 50,
     });

@@ -2,21 +2,26 @@
 const path = require('path');
 const express = require('express');
 const moment = require('moment-timezone');
+const { parse } = require('json2csv');
 
 const { Feedback } = require('../../db/models');
 const { sanitise } = require('../../common/sanitise');
-const { parse } = require('json2csv');
+
+const { getDateRangeWithDefault } = require('./lib/date-helpers');
 
 const router = express.Router();
 
 async function render(req, res) {
+    const dateRange = getDateRangeWithDefault(req.query.start, req.query.end);
+
     const title = 'Feedback results';
-    const feedback = await Feedback.findAllGroupedByDescription();
+    const feedback = await Feedback.findAllGroupedByDescription(dateRange);
 
     res.render(path.resolve(__dirname, './views/feedback'), {
-        title: title,
+        title,
         breadcrumbs: res.locals.breadcrumbs.concat({ label: title }),
         feedback,
+        dateRange,
     });
 }
 

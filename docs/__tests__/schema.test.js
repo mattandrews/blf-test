@@ -10,7 +10,7 @@ function validateSchemaDocumentation(formBuilder, schemaDocPath) {
     const docContents = fs.readFileSync(schemaDocPath, 'utf8');
 
     describe(`${form.title} schema documentation`, function () {
-        test.each(Object.keys(form.schema.describe().children))(
+        test.each(Object.keys(form.schema.describe().keys))(
             '%s has documentation entry',
             (fieldName) => {
                 const fieldNameRegexp = new RegExp(`### ${fieldName}`);

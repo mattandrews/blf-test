@@ -11,7 +11,10 @@ const {
     setCommonLocals,
 } = require('../../common/inject-content');
 const { buildArchiveUrl, localify } = require('../../common/urls');
-const { flexibleContentPage } = require('../common');
+const {
+    flexibleContentPage,
+    renderFlexibleContentChild,
+} = require('../common');
 
 const router = express.Router();
 const ContentApi = new ContentApiClient();
@@ -95,9 +98,11 @@ router.get('/:slug/:child_slug?', async function (req, res, next) {
             requestParams: req.query,
         });
 
-        if (entry) {
-            setCommonLocals(req, res, entry);
+        setCommonLocals(req, res, entry);
 
+        if (entry && entry.entryType === 'contentPage') {
+            renderFlexibleContentChild(req, res, entry);
+        } else if (entry) {
             if (entry.parent) {
                 res.locals.breadcrumbs.push({
                     label: entry.parent.title,

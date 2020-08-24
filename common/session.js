@@ -26,7 +26,7 @@ module.exports = function (app) {
         resave: false,
         saveUninitialized: false,
         cookie: {
-            sameSite: false,
+            sameSite: isDev ? false : 'none',
             secure: isDev === false,
             maxAge: config.get('session.expiryInSeconds') * 1000,
         },

@@ -139,7 +139,12 @@ module.exports = function (
                 config.get('features.enableSalesforceConnector') === true &&
                 !appData.isTestServer
             ) {
-                const salesforce = await salesforceService.authorise();
+                let salesforce = {};
+                if (res.locals.USE_GMS_SANDBOX) {
+                    salesforce = await salesforceService.sandboxAuthorise();
+                } else {
+                    salesforce = await salesforceService.authorise();
+                }
                 salesforceRecordId = await salesforce.submitFormData(
                     salesforceFormData
                 );

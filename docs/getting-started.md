@@ -8,6 +8,8 @@ You'll need the following tools installed in order to run the project locally:
 -   MySQL v5.7+
 -   [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) configured on your machine
 
+You will also need a modern, Bash-like terminal app. On Windows, Git Bash is recommended.
+
 Once you have the prerequisites installed on your machine, and have the project checked out locally, run these commands in your terminal of choice:
 
 ## Install dependencies
@@ -24,7 +26,7 @@ Next, you'll need to download the application secrets. These are configuration s
 
 Create a directory called `/etc/blf/` and make sure it is writeable. This is where application secrets will be stored.
 
-Optional: you can override the location of this directory by setting an environment variable like so:
+**Optional**: for Windows users, you can override the location of this directory by setting an environment variable like so:
 
 ```
 SECRET_DIR=C:/Users/Someone/FolderName
@@ -58,10 +60,25 @@ npm run build
 
 ## Start the application
 
-This command runs the app through `nodemon` with debugging enabled.
+This command runs the app through `nodemon` with debugging enabled. Changes to server-side code will be automatically applied when you reload. If you add `SHOW_RESTART_NOTIFICATION=true` to your `.env` file you'll get a native system notification when the app has reloaded (which takes a few seconds).
 
 ```shell script
 npm run start-dev
 ```
 
-The application should now be running. Visit `http://localhost:3000` in your browser to confirm everything is OK.
+## Watch for front-end changes
+
+If you wish for CSS and JavaScript files to be recompiled automatically when working, run the following command in another terminal:
+
+```shell script
+npm run watch
+```
+
+When you reload your web browser, you should see the latest CSS/JS changes.
+
+
+## IDE / text editor configuration
+
+It's recommended that you use [prettier](https://prettier.io/)  and [ESLint](https://eslint.org/) with whatever editor/IDE you use – the settings for both are contained within the app (eg. `package.json` for Prettier and `.eslintrc.js` for ESLint). Ideally you should configure your editor to apply Prettier's rules when saving files locally (so you can never commit anything with non-standard formatting), and to flag ESLint violations within your editor – again, so you can fix them before the build runs and fails.
+
+We also have an `.editorconfig` file to define common things like spacing, newlines, etc. It's recommended to use this too (where your editor supports it) to ensure the team is working to the same code style.

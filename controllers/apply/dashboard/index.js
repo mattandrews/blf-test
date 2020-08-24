@@ -98,10 +98,12 @@ router.get(
              */
             const [
                 latestApplication,
+                pendingApplications,
                 pendingSimple,
                 pendingStandard,
             ] = await Promise.all([
                 getLatestApplication(req.user.id, req.i18n.getLocale()),
+                PendingApplication.findAllByUserId(req.user.id),
                 PendingApplication.findUserApplicationsByForm({
                     userId: req.user.id,
                     formId: 'awards-for-all',
@@ -112,7 +114,7 @@ router.get(
                 }),
             ]);
 
-            const notices = getNoticesAll(req.i18n.getLocale(), pendingSimple);
+            const notices = getNoticesAll(req.i18n.getLocale(), pendingApplications);
             if (notices.length > 0) {
                 logger.info('Notice shown on dashboard');
             }

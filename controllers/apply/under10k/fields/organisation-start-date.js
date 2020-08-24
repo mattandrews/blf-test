@@ -2,16 +2,16 @@
 const get = require('lodash/fp/get');
 const moment = require('moment');
 
-const Joi = require('../../lib/joi-extensions');
+const MonthYearField = require('../../lib/field-types/month-year');
 
 module.exports = function (locale) {
     const localise = get(locale);
 
     const exampleYear = moment().subtract('5', 'years').format('YYYY');
 
-    return {
+    return new MonthYearField({
+        locale: locale,
         name: 'organisationStartDate',
-        type: 'month-year',
         label: localise({
             en: `When was your organisation set up?`,
             cy: `Pryd sefydlwyd eich sefydliad?`,
@@ -23,37 +23,5 @@ module.exports = function (locale) {
                  <p><strong>Er enghraifft: 11 ${exampleYear}</strong></p>`,
         }),
         isRequired: true,
-        schema: Joi.monthYear().pastDate().required(),
-        messages: [
-            {
-                type: 'base',
-                message: localise({
-                    en: 'Enter a month and year',
-                    cy: 'Rhowch fis a blwyddyn',
-                }),
-            },
-            {
-                type: 'any.invalid',
-                message: localise({
-                    en: 'Enter a real month and year',
-                    cy: 'Rhowch fis a blwyddyn go iawn',
-                }),
-            },
-            {
-                type: 'number.min',
-                key: 'year',
-                message: localise({
-                    en: `Must be a full year e.g. ${exampleYear}`,
-                    cy: `Rhaid bod yn flwyddyn gyfan e.e ${exampleYear}`,
-                }),
-            },
-            {
-                type: 'monthYear.pastDate',
-                message: localise({
-                    en: 'Date you enter must be in the past',
-                    cy: 'Rhaid i’r dyddiad fod yn y gorffennol',
-                }),
-            },
-        ],
-    };
+    });
 };

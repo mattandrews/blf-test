@@ -1,7 +1,6 @@
 'use strict';
 const get = require('lodash/fp/get');
 
-const { formatCurrency } = require('../lib/formatters');
 const { findLocationName } = require('./lib/locations');
 
 const formBuilder = require('./form');
@@ -16,13 +15,23 @@ function details(application, data, locale) {
         })}`;
     }
 
+    const countries = get('projectCountries')(data);
+
     return {
         projectName: data.projectName,
         untitledName: localise({
             en: `Untitled proposal`,
             cy: `Cynnig heb deitl`,
         }),
-        amountRequested: formatCurrency(data.projectCosts || 0),
+        projectCountry: countries
+            ? countries.length === 1
+                ? countries[0]
+                : 'Multiple'
+            : null,
+        get amountRequested() {
+            const value = data.projectCosts || 0;
+            return `£${value.toLocaleString()}`;
+        },
         overview: [
             {
                 label: localise({ en: 'Project length', cy: 'Hyd y prosiect' }),

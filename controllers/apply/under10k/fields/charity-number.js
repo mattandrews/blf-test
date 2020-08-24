@@ -2,7 +2,8 @@
 const get = require('lodash/fp/get');
 
 const { CHARITY_NUMBER_TYPES, FREE_TEXT_MAXLENGTH } = require('../constants');
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
+const Field = require('../../lib/field-types/field');
 
 module.exports = function (locale, data) {
     /**
@@ -18,26 +19,27 @@ module.exports = function (locale, data) {
     const excludeRegex = /^[^Oo]+$/;
 
     const baseSchema = Joi.string()
-        .regex(excludeRegex)
+        .pattern(excludeRegex)
         .min(4)
         .max(FREE_TEXT_MAXLENGTH.large);
 
-    const schema = Joi.when(Joi.ref('organisationType'), {
-        is: Joi.exist().valid(CHARITY_NUMBER_TYPES.required),
+    const schema = Joi.when('organisationType', {
+        is: Joi.exist().valid(...CHARITY_NUMBER_TYPES.required),
         then: baseSchema.required(),
-    }).when(Joi.ref('organisationType'), {
-        is: Joi.exist().valid(CHARITY_NUMBER_TYPES.optional),
-        then: baseSchema.optional().allow('', null),
-        otherwise: Joi.any().strip(),
+        otherwise: Joi.when('organisationType', {
+            is: Joi.exist().valid(...CHARITY_NUMBER_TYPES.optional),
+            then: baseSchema.optional().allow('', null),
+            otherwise: Joi.any().strip(),
+        }),
     });
 
-    return {
+    return new Field({
+        locale: locale,
         name: 'charityNumber',
         label: localise({
             en: 'Charity registration number',
             cy: 'Rhif cofrestru elusen',
         }),
-        type: 'text',
         attributes: { size: 20 },
         isRequired: CHARITY_NUMBER_TYPES.required.includes(
             currentOrganisationType
@@ -52,7 +54,7 @@ module.exports = function (locale, data) {
                 }),
             },
             {
-                type: 'string.regex.base',
+                type: 'string.pattern.base',
                 message: localise({
                     en:
                         'Enter a real charity registration number. And don’t use any spaces. Scottish charity registration numbers must also use the number ‘0’ in ‘SC0’ instead of the letter ‘O’.',
@@ -68,5 +70,5 @@ module.exports = function (locale, data) {
                 }),
             },
         ],
-    };
+    });
 };

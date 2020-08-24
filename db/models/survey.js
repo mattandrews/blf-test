@@ -40,10 +40,21 @@ class SurveyAnswer extends Model {
             }),
         ]);
     }
-    static findAllByPath(urlPath) {
-        const query = { order: [['updatedAt', 'DESC']] };
+    static findAllByPath(urlPath, dateRange) {
+        const query = {
+            order: [['updatedAt', 'DESC']],
+            where: {},
+        };
+
         if (urlPath) {
             query.where = { path: { [Op.eq]: urlPath } };
+        }
+
+        if (dateRange) {
+            const dateClause = {
+                createdAt: { [Op.between]: [dateRange.start, dateRange.end] },
+            };
+            query.where = { ...query.where, ...dateClause };
         }
 
         return this.findAll(query);

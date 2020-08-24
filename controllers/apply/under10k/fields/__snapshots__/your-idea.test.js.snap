@@ -2,28 +2,29 @@
 
 exports[`show COVID-19 guidance text in England 1`] = `
 <p>
-  <strong>
-    We will prioritise:
-  </strong>
+  We'll prioritise organisations supporting people and communities who experience 
+disproportionate challenge and difficulty as a result of the COVID-19 crisis. This category
+includes groups which are facing specific challenges during the current crisis and includes
+organisations supporting:
 </p>
-<ol>
+<ul>
   <li>
-    organisations supporting people who are
-at high risk from COVID-19
+    older people
   </li>
   <li>
-    organisations supporting people most likely to face
-increased demand and challenges as a result of
-the COVID-19 crisis
+    disabled people (including people with long-term health conditions)
   </li>
   <li>
-    organisations which connect communities and support
-communities to work together to respond to COVID-19.
+    lesbian, gay, bisexual, transgender, queer + (LGBTQ+) communities
   </li>
-</ol>
+  <li>
+    Black, Asian and Minority Ethnic (BAME) communities.
+  </li>
+</ul>
 <p>
-  You can tell us if your project meets more
-than one priority, but don't worry if it doesn't.
+  It also includes organisations who provide advice and support to those pushed into crisis as a 
+result of the pandemic, and those organisations supporting people and their families with 
+end-of-life care.
 </p>
 <p>
   <strong>
@@ -34,6 +35,40 @@ but don't worry if you use less.
 `;
 
 exports[`show COVID-19 guidance text in England 2`] = `
+<p>
+  We'll prioritise organisations supporting people and communities who experience 
+disproportionate challenge and difficulty as a result of the COVID-19 crisis. This category
+includes groups which are facing specific challenges during the current crisis and includes
+organisations supporting:
+</p>
+<ul>
+  <li>
+    older people
+  </li>
+  <li>
+    disabled people (including people with long-term health conditions)
+  </li>
+  <li>
+    lesbian, gay, bisexual, transgender, queer + (LGBTQ+) communities
+  </li>
+  <li>
+    Black, Asian and Minority Ethnic (BAME) communities.
+  </li>
+</ul>
+<p>
+  It also includes organisations who provide advice and support to those pushed into crisis as a 
+result of the pandemic, and those organisations supporting people and their families with 
+end-of-life care.
+</p>
+<p>
+  <strong>
+    You can write up to 150 words for this section,
+but don't worry if you use less.
+  </strong>
+</p>
+`;
+
+exports[`show COVID-19 guidance text outside England when project is responding to COVID-19 1`] = `
 <p>
   <strong>
     We will prioritise:
@@ -67,7 +102,7 @@ but don't worry if you use less.
 </p>
 `;
 
-exports[`show COVID-19 guidance text outside England when project is responding to COVID-19 1`] = `
+exports[`show combined guidance text as a fallback 1`] = `
 <p>
   <strong>
     We will prioritise:
@@ -75,69 +110,18 @@ exports[`show COVID-19 guidance text outside England when project is responding 
 </p>
 <ol>
   <li>
-    organisations supporting people who are
-at high risk from COVID-19
+    organisations supporting people and communities
+who experience disproportionate challenge and
+difficulty as a result of the COVID-19 crisis
   </li>
   <li>
-    organisations supporting people most likely to face
-increased demand and challenges as a result of
-the COVID-19 crisis
-  </li>
-  <li>
-    organisations which connect communities and support
-communities to work together to respond to COVID-19.
-  </li>
-</ol>
-<p>
-  You can tell us if your project meets more
-than one priority, but don't worry if it doesn't.
-</p>
-<p>
-  <strong>
-    You can write up to 150 words for this section,
-but don't worry if you use less.
-  </strong>
-</p>
-`;
-
-exports[`show combined guidance text as a fallback 1`] = `
-<p>
-  <strong>
-    If your project is COVID-19 related, we will prioritise:
-  </strong>
-</p>
-<ol>
-  <li>
-    organisations supporting people who are
-at high risk from COVID-19
-  </li>
-  <li>
-    organisations supporting people most likely to face
-increased demand and challenges as a result of
-the COVID-19 crisis
+    organisations providing services and support
+for vulnerable people, for which there will be
+increased demand as a result of the COVID-19 crisis
   </li>
   <li>
     organisations which connect communities and support
 communities to work together to respond to COVID-19.
-  </li>
-</ol>
-<p>
-  <strong>
-    But for all other projects, we want to fund ideas that do
-at least one of these three things:
-  </strong>
-</p>
-<ol>
-  <li>
-    Bring people together and build strong
-relationships in and across communities
-  </li>
-  <li>
-    Improve the places and spaces that matter to communities
-  </li>
-  <li>
-    Help more people to reach their potential,
-by supporting them at the earliest possible stage
   </li>
 </ol>
 <p>
@@ -155,20 +139,23 @@ but don't worry if you use less.
 exports[`show regular guidance text outside England when project is not responding to COVID-19 1`] = `
 <p>
   <strong>
-    We want to fund ideas that do at least one of these three things:
+    We will prioritise:
   </strong>
 </p>
 <ol>
   <li>
-    Bring people together and build strong
-relationships in and across communities
+    organisations supporting people and communities
+who experience disproportionate challenge and
+difficulty as a result of the COVID-19 crisis
   </li>
   <li>
-    Improve the places and spaces that matter to communities
+    organisations providing services and support
+for vulnerable people, for which there will be
+increased demand as a result of the COVID-19 crisis
   </li>
   <li>
-    Help more people to reach their potential,
-by supporting them at the earliest possible stage
+    organisations which connect communities and support
+communities to work together to respond to COVID-19.
   </li>
 </ol>
 <p>

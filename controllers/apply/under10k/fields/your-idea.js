@@ -89,19 +89,43 @@ module.exports = {
             ],
         });
     },
-    fieldYourIdeaPriorities(locale, data = {}, flags = {}) {
+    fieldYourIdeaPriorities(locale, data = {}) {
         const localise = get(locale);
-
         const projectCountry = get('projectCountry')(data);
-        const supportingCOVID19 = get('supportingCOVID19')(data);
-
         const minWords = 50;
         const maxWords = 150;
 
-        function prioritiesCOVID19() {
-            if (flags.enableGovCOVIDUpdates && projectCountry === 'england') {
-                return localise({
-                    en: `<ol>
+        function prioritiesDiversity() {
+            return localise({
+                en: `
+                    <ul>
+                        <li>older people</li>
+                        <li>disabled people (including people with long-term health conditions)</li>
+                        <li>lesbian, gay, bisexual, transgender, queer + (LGBTQ+) communities</li>
+                        <li>Black, Asian and Minority Ethnic (BAME) communities.</li>
+                    </ul>
+                    <p>
+                        It also includes organisations who provide advice and support to those pushed into crisis as a 
+                        result of the pandemic, and those organisations supporting people and their families with 
+                        end-of-life care.
+                    </p>`,
+                cy: `<ul>
+                        <li>pobl hŷn</li>
+                        <li>pobl anabl (gan gynnwys pobl â chyflyrau iechyd tymor hir)</li>
+                        <li>cymunedau lesbiaidd, hoyw, deurywiol, trawsryweddol, queer + (LHDTQ +)</li>
+                        <li>cymunedau Du, Asiaidd a Lleiafrifoedd Ethnig.</li> 
+                    </ul>
+                    <p>
+                        Mae hefyd yn cynnwys sefydliadau sy'n darparu cyngor a chefnogaeth i'r rhai sy'n cael eu
+                        gwthio i argyfwng o ganlyniad i'r pandemig, a'r sefydliadau hynny sy'n cefnogi pobl a'u
+                        teuluoedd â gofal diwedd oes
+                    </p>`,
+            });
+        }
+
+        function prioritiesCovid19() {
+            return localise({
+                en: `<ol>
                         <li>organisations supporting people and communities
                             who experience disproportionate challenge and
                             difficulty as a result of the COVID-19 crisis
@@ -114,7 +138,7 @@ module.exports = {
                             communities to work together to respond to COVID-19.
                         </li>
                     </ol>`,
-                    cy: `<ol>
+                cy: `<ol>
                         <li>sefydliadau sy'n cefnogi pobl a chymunedau sy'n
                             profi her ac anhawster anghymesur o ganlyniad
                             i argyfwng Covid-19
@@ -127,126 +151,40 @@ module.exports = {
                             cymunedau i weithio gyda'i gilydd i ymateb i Covid-19
                         </li>
                     </ol>`,
+            });
+        }
+        function guidanceText() {
+            if (projectCountry === 'england') {
+                return localise({
+                    en: `<p>
+                            We'll prioritise organisations supporting people and communities who experience 
+                            disproportionate challenge and difficulty as a result of the COVID-19 crisis. This category
+                            includes groups which are facing specific challenges during the current crisis and includes
+                            organisations supporting:
+                        </p>
+                        ${prioritiesDiversity()}`,
+                    cy: `<p>
+                            Byddwn yn blaenoriaethu sefydliadau sy’n cefnogi pobl a chymunedau sy’n profi heriau ac
+                            anawsterau anghymesur o ganlyniad o’r argyfwng COVID-19. Mae’r categori hwn yn cynnwys
+                            grwpiau sy’n wynebu heriau penodol yn ystod yr argyfwng presennol a’n cynnwys sefydliadau
+                            sy’n cefnogi:
+                        </p>
+                        ${prioritiesDiversity()}`,
                 });
             } else {
                 return localise({
-                    en: `<ol>
-                    <li>organisations supporting people who are
-                        at high risk from COVID-19
-                    </li>
-                    <li>organisations supporting people most likely to face
-                        increased demand and challenges as a result of
-                        the COVID-19 crisis
-                    </li>
-                    <li>organisations which connect communities and support
-                        communities to work together to respond to COVID-19.
-                    </li>
-                </ol>`,
-                    cy: `<ol>
-                    <li>sefydliadau sy'n cefnogi pobl sydd â risg uchel o COVID-19
-                    </li>
-                    <li>sefydliadau sy'n cefnogi pobl sydd fwyaf tebygol o wynebu
-                        galw a heriau cynyddol o ganlyniad i argyfwng COVID-19
-                    </li>
-                    <li>sefydliadau sy'n cysylltu cymunedau ac yn cefnogi cymunedau 
-                        i weithio gyda'i gilydd i ymateb i COVID-19.
-                    </li>
-                </ol>`,
-                });
-            }
-        }
-
-        function prioritiesDefault() {
-            return localise({
-                en: `<ol>
-                    <li>
-                        Bring people together and build strong
-                        relationships in and across communities
-                    </li>
-                    <li>Improve the places and spaces that matter to communities</li>
-                    <li>
-                        Help more people to reach their potential,
-                        by supporting them at the earliest possible stage
-                    </li>
-                </ol>`,
-                cy: `<ol>
-                    <li>
-                        Dod â phobl ynghyd a meithrin perthnasoedd 
-                        cryf mewn ac ar draws cymunedau
-                    </li>
-                    <li>Gwella'r lleoedd sy'n bwysig i gymunedau</li>
-                    <li>
-                        Helpu mwy o bobl i gyrraedd eu potensial, 
-                        trwy eu cefnogi cyn gynted â phosibl
-                    </li>
-                </ol>`,
-            });
-        }
-
-        function guidanceText() {
-            if (projectCountry === 'england' || supportingCOVID19 === 'yes') {
-                return localise({
                     en: `<p><strong>We will prioritise:</strong></p>
-                        ${prioritiesCOVID19()}
+                        ${prioritiesCovid19()}
                         <p>
                             You can tell us if your project meets more
                             than one priority, but don't worry if it doesn't.
                         </p>`,
                     cy: `<p><strong>Byddwn yn blaenoriaethu:</strong></p>
-                        ${prioritiesCOVID19()}
+                        ${prioritiesCovid19()}
                         <p>
                             Gallwch ddweud wrthym a yw'ch prosiect yn cwrdd â mwy 
                             nag un flaenoriaeth, ond peidiwch â phoeni os na fydd.
                         </p>`,
-                });
-            } else if (supportingCOVID19 === 'no') {
-                return localise({
-                    en: `<p><strong>
-                            We want to fund ideas that do at least one of these three things:
-                        </strong></p>
-                        ${prioritiesDefault()}
-                        <p>
-                            You can tell us if your project meets more
-                            than one priority, but don't worry if it doesn't.
-                        </p>`,
-                    cy: `<p><strong>
-                            Rydym am ariannu syniadau sy'n gwneud o leiaf un o'r tri pheth hyn:
-                        </strong></p>
-                        ${prioritiesDefault()}
-                        <p>
-                            Gallwch ddweud wrthym a yw'ch prosiect yn cwrdd â mwy 
-                            nag un flaenoriaeth, ond peidiwch â phoeni os na fydd.
-                        </p>`,
-                });
-            } else {
-                return localise({
-                    en: `<p>
-                        <strong>If your project is COVID-19 related, we will prioritise:</strong>
-                    </p>
-                    ${prioritiesCOVID19()}
-                    <p><strong>
-                        But for all other projects, we want to fund ideas that do
-                        at least one of these three things:
-                    </strong></p>
-                    ${prioritiesDefault()}
-                    <p>
-                        You can tell us if your project meets more
-                        than one priority, but don't worry if it doesn't.
-                    </p>`,
-
-                    cy: `<p>
-                        <strong>Os yw'ch prosiect yn gysylltiedig â COVID-19, byddwn yn blaenoriaethu:</strong>
-                    </p>
-                    ${prioritiesCOVID19()}
-                    <p><strong>
-                        Ond ar gyfer pob prosiect arall, rydyn ni am ariannu syniadau 
-                        sy'n gwneud o leiaf un o'r tri pheth hyn:
-                    </strong></p>
-                    ${prioritiesDefault()}
-                    <p>
-                        Gallwch ddweud wrthym a yw'ch prosiect yn cwrdd â mwy 
-                        nag un flaenoriaeth, ond peidiwch â phoeni os na fydd.
-                    </p>`,
                 });
             }
         }
@@ -255,8 +193,8 @@ module.exports = {
             locale: locale,
             name: 'yourIdeaPriorities',
             label: localise({
-                en: `How does your project meet at least one of our funding priorities?`,
-                cy: `Sut mae eich prosiect yn bodloni o leiaf un o’n tair blaenoriaeth ariannu?`,
+                en: `How does your project meet our funding priority?`,
+                cy: `Sut mae'ch prosiect yn cwrdd â'n blaenoriaeth ariannu?`,
             }),
             explanation: stripIndents`${guidanceText()}${wordCountText(
                 locale,

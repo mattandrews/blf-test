@@ -20,14 +20,22 @@ function details(application, data, locale) {
 
     function formatProjectDates() {
         if (get('projectStartDateCheck')(data) === 'asap') {
+            // Check for the new 'ASAP' value for Covid-19 fund
             return localise({
                 en: `As soon as possible`,
                 cy: `Dyddiad cychwyn y prosiect`,
             });
         } else if (data.projectStartDate && data.projectEndDate) {
+            // Fall back to formatting the regular start/end dare
             return formatDateRange(locale)({
                 startDate: data.projectStartDate,
                 endDate: data.projectEndDate,
+            });
+        } else if (data.projectDateRange) {
+            // Also support the legacy format (which has now been deprecated and is only in older data)
+            return formatDateRange(locale)({
+                startDate: data.projectDateRange.startDate,
+                endDate: data.projectDateRange.endDate,
             });
         } else {
             return null;
@@ -40,6 +48,7 @@ function details(application, data, locale) {
             en: `Untitled application`,
             cy: `Cais heb deitl`,
         }),
+        projectCountry: get('projectCountry')(data),
         amountRequested: formatBudgetTotal(data.projectBudget),
         overview: [
             {

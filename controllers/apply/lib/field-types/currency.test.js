@@ -15,7 +15,7 @@ test('valid field', function () {
 
     field.withValue('120,000');
 
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
     expect(field.validate().value).toBe(120000);
     expect(field.displayValue).toBe('£120,000');
 });
@@ -28,5 +28,5 @@ test('optional field', function () {
         isRequired: false,
     });
 
-    expect(field.validate().error).toBeNull();
+    expect(field.validate().error).toBeUndefined();
 });

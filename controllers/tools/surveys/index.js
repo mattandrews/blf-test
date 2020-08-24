@@ -1,7 +1,6 @@
 'use strict';
 const path = require('path');
 const express = require('express');
-const moment = require('moment');
 
 const { SurveyAnswer } = require('../../../db/models');
 const { sanitise } = require('../../../common/sanitise');
@@ -11,22 +10,25 @@ const pageCountsFor = require('./lib/page-counts');
 const percentagesFor = require('./lib/percentages');
 const voteDataFor = require('./lib/vote-data');
 
+const { getDateRangeWithDefault } = require('../lib/date-helpers');
+
 const router = express.Router();
 
 router.get('/', async function (req, res, next) {
     try {
+        const dateRange = getDateRangeWithDefault(
+            req.query.start,
+            req.query.end
+        );
+
         const responses = await SurveyAnswer.findAllByPath(
-            sanitise(req.query.path)
+            sanitise(req.query.path),
+            dateRange
         );
 
         if (req.query.download && req.query.path && responses.length > 0) {
             res.attachment(`surveyResponses.csv`).send(csvSummary(responses));
         } else {
-            const recentResponses = responses.filter(function (response) {
-                const startDt = moment().subtract('30', 'days');
-                return moment(response.createdAt).isSameOrAfter(startDt, 'day');
-            });
-
             const title = 'Surveys';
             res.render(path.resolve(__dirname, './views/survey'), {
                 title: title,
@@ -34,7 +36,7 @@ router.get('/', async function (req, res, next) {
                 survey: {
                     totalResponses: responses.length,
                     voteData: voteDataFor(responses),
-                    recentStats: percentagesFor(recentResponses),
+                    recentStats: percentagesFor(responses),
                     pageCounts: pageCountsFor(responses),
                     pageCountsWithResponses: pageCountsFor(
                         responses.filter((response) => response.message)
@@ -44,6 +46,7 @@ router.get('/', async function (req, res, next) {
                     ),
                 },
                 pathQuery: req.query.path,
+                dateRange,
             });
         }
     } catch (error) {

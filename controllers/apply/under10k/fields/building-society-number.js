@@ -1,19 +1,20 @@
 'use strict';
 const get = require('lodash/fp/get');
 
-const Joi = require('../../lib/joi-extensions');
+const Joi = require('../../lib/joi-extensions-next');
 const { FREE_TEXT_MAXLENGTH } = require('../constants');
+const Field = require('../../lib/field-types/field');
 
 module.exports = function (locale) {
     const localise = get(locale);
 
-    return {
+    return new Field({
+        locale: locale,
         name: 'buildingSocietyNumber',
         label: localise({
             en: 'Building society number',
             cy: 'Rhif cymdeithas adeiladu',
         }),
-        type: 'text',
         attributes: { autocomplete: 'off' },
         explanation: localise({
             en: `You only need to fill this in if your organisation's account is with a building society.`,
@@ -30,5 +31,5 @@ module.exports = function (locale) {
                 }),
             },
         ],
-    };
+    });
 };

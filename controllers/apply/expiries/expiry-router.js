@@ -18,7 +18,7 @@ const logger = require('../../../common/logger').child({
     service: 'application-expiry',
 });
 
-const sendExpiryEmail = require('./send-expiry-email');
+const { sendExpiryEmail } = require('./send-expiry-email');
 
 const router = express.Router();
 
@@ -68,8 +68,9 @@ async function sendExpiryEmails(req, emailQueue) {
             });
 
             if (emailStatus.response || appData.isTestServer) {
-                const queueStatus = await ApplicationEmailQueue.updateStatusToSent(
-                    emailToSend.id
+                const queueStatus = await ApplicationEmailQueue.updateStatus(
+                    emailToSend.id,
+                    'SENT'
                 );
 
                 return {
