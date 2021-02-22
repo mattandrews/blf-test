@@ -101,7 +101,7 @@ Cypress.Commands.add('checkA11y', ({ context, options } = {}) => {
     const excludedRules = {
         // Color contrast is better checked manually
         'color-contrast': { enabled: false },
-        'landmark-unique': { enabled: false },
+        'landmark-unique': { enabled: true },
     };
 
     const combinedOptions = merge({ rules: excludedRules }, options);
